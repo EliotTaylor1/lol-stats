@@ -9,7 +9,6 @@ export const createSummoner = async (req, res) => {
     console.log(account)
     res.json({
         status:'received',
-        data: req.body,
         summonerName: account.summonerName,
         tag: account.tag,
         region: account.region,
