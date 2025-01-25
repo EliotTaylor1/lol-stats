@@ -24,6 +24,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 throw new Error(data.message);
             }
 
+
             resultDiv.innerHTML = `
                 <div class="profile-card">
                     <h2>Summoner Profile</h2>

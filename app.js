@@ -2,6 +2,7 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import createSummoner from './routes/summoner.js'
+import getChampionStats from './routes/championStats.js'
 
 const app = express()
 const port = 3000
@@ -18,3 +19,4 @@ app.listen(port, () => {
 })
 
 app.use('/summoner', createSummoner)
+app.use('/champions', getChampionStats)
