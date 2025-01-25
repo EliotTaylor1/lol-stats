@@ -9,7 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
             region: document.getElementById('region').value
         };
 
-        fetch('http://localhost:3000/profile', {
+        fetch('http://localhost:3000/summoner', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

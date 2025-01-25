@@ -1,6 +1,8 @@
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
+import createSummoner from './routes/summoner.js'
+
 const app = express()
 const port = 3000
 
@@ -15,14 +17,4 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-app.post('/profile', (req, res) => {
-    console.log("Got profile post request")
-    console.log(req.body)
-    const summonerName = req.body.summonerName
-    const tag = req.body.tag;
-    const region = req.body.region
-    res.json({
-        status:'received',
-        data: req.body
-    })
-})
+app.use('/summoner', createSummoner)
