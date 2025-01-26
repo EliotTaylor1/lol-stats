@@ -1,7 +1,10 @@
-import { ChampionStats } from "../models/ChampionStats.js";
-import { RiotAccount } from "../models/RiotAccount.js";
+import express from 'express'
+import { RiotAccount } from './profile.model.js'
+import { ChampionStats } from './champions.model.js'
 
-export const getChampionStats = async (req , res) => {
+const router = express.Router()
+
+router.post('/champions', async (req , res) => {
     console.log("Got Champions POST request")
     const {summonerName, tag, region} = req.body
 
@@ -21,4 +24,6 @@ export const getChampionStats = async (req , res) => {
             champions: championStats.champions
         }
     })
-}
+})
+
+export default router
