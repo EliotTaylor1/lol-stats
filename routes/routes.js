@@ -1,9 +1,7 @@
 import {Router} from 'express'
-import createSummoner from './summoner/profile.controller.js'
-import getChampionStats from './summoner/champions.controller.js'
+import profile from './summoner/profile.controller.js'
 
 const api = Router()
-    .use(getChampionStats)
-    .use(createSummoner)
+    .use(profile)
 
-export default Router().use('/api', api)
+export default api
