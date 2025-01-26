@@ -4,17 +4,17 @@ import cors from 'cors'
 import routes from './routes/routes.js'
 
 const app = express()
-const port = 3000
+const port = process.env.PORT
 
 app.use(express.json())
 app.use(cors());
 app.use(routes);
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Success: API is working')
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Server listening on port ${port}`)
 })
 
