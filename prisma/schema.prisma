@@ -14,8 +14,20 @@ datasource db {
 }
 
 model SummonerId {
-  id Int @id @default(value: autoincrement())
-  puuid String @unique
-  summoner_Id String @unique
-  account_Id String @unique
+  id             Int              @id @default(autoincrement())
+  puuid          String           @unique
+  summoner_Id    String           @unique
+  account_Id     String           @unique
+  summoner_name  String
+  summoner_tag   String
+  details        SummonerDetails? @relation("SummonerToDetails")
+  @@unique([summoner_name, summoner_tag])
+}
+
+model SummonerDetails {
+  id           Int         @id @default(autoincrement())
+  puuid        String      @unique
+  summoner_level        Int
+  summoner_profileIcon  Int
+  summonerId   SummonerId  @relation("SummonerToDetails", fields: [puuid], references: [puuid])
 }
