@@ -1,6 +1,6 @@
 import express from 'express'
 import { RiotAccount } from './profile.model.js'
-import { ChampionStats } from './champions.model.js'
+import { ChampionStats } from './mastery.model.js'
 
 const router = express.Router()
 
@@ -24,7 +24,7 @@ router.post('/profile', async (req, res) => {
         })
 })
 
-router.post('/profile/champions', async (req , res) => {
+router.post('/profile/mastery', async (req , res) => {
     console.log("Got Champions POST request")
     const {summonerName, tag, region} = req.body
 
