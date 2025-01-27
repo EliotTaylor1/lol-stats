@@ -50,7 +50,7 @@ export const createSummoner = async (summonerName, region, tag) => {
 export const getSummoner = async (summonerName, tag) => {
     const summoner = await prisma.summonerId.findUnique({
         where: {
-            summoner_name_summoner_tag: {
+            summoner_name_tag_unique: {
                 summoner_name: summonerName,
                 summoner_tag: tag
             }
