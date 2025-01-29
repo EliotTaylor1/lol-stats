@@ -52,8 +52,6 @@ model Match {
   duration    Int
   gamemode    String
   game_type   String
-  ended_in_surrender Boolean
-  ended_in_early_surrender Boolean
   game_version String
   participants Participant[]
 }
@@ -68,10 +66,10 @@ model Participant {
   lane String
   role String
   individual_position String
-  performance MatchPerformance?
-  build       MatchBuild?
-  pings       MatchPings?
-  casts       MatchCasts?
+  performance ParticipantPerformance?
+  build       ParticipantBuild?
+  pings       ParticipantPings?
+  casts       ParticipantCasts?
   challenges ParticipantChallenges?
   match       Match        @relation(fields: [matchId], references: [matchId])
   summoner    SummonerId   @relation(fields: [puuid], references: [puuid])
@@ -79,7 +77,7 @@ model Participant {
   @@id([matchId, puuid])
 }
 
-model MatchPerformance {
+model ParticipantPerformance {
   participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
   matchId                  String
   puuid                    String
@@ -116,15 +114,17 @@ model MatchPerformance {
   objectives_stolen_assists Int
   vision_score             Int
   wards_killed             Int
-  wards_placed             Int
+  stealth_wards_placed             Int
+  vision_wards_placed Int
 
   @@id([matchId, puuid])
 }
 
-model MatchBuild {
+model ParticipantBuild {
   participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
   matchId                  String
   puuid                    String
+  item_0                   Int
   item_1                   Int
   item_2                   Int
   item_3                   Int
@@ -140,27 +140,27 @@ model MatchBuild {
   @@id([matchId, puuid])
 }
 
-model MatchPings {
+model ParticipantPings {
   participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
   matchId                  String
   puuid                    String
   basic_pings              Int
-  all_in_pings             Int
-  assist_me_pings          Int
-  command_pings            Int
-  danger_pings             Int
-  enemy_missing_pings      Int
-  enemy_vision_pings       Int
-  need_vision_pings        Int
-  fallback_pings           Int
+  all_in_pings             Int //yellow crossed swords
+  assist_me_pings          Int //green flag
+  command_pings            Int //blue dot
+  danger_pings             Int //red exclamationmark
+  enemy_missing_pings      Int //yellow questionmark
+  enemy_vision_pings       Int //red eyeball
+  need_vision_pings        Int //green ward
+  fallback_pings           Int //yellow circle with horizontal line
   hold_pings               Int
-  on_my_way_pings          Int
-  push_pings               Int
+  on_my_way_pings          Int //blue arrow pointing on ground
+  push_pings               Int //green minion
 
   @@id([matchId, puuid])
 }
 
-model MatchCasts {
+model ParticipantCasts {
   participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
   matchId                  String
   puuid                    String
