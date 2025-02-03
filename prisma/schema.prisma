@@ -46,7 +46,7 @@ model SummonerMastery {
 }
 
 model Match {
-  matchId     String      @id @unique
+  match_id     String      @id @unique
   start       BigInt
   end         BigInt
   duration    Int
@@ -57,7 +57,7 @@ model Match {
 }
 
 model Participant {
-  matchId     String
+  match_id     String
   puuid       String
   team_id     Int
   win         Boolean
@@ -71,15 +71,15 @@ model Participant {
   pings       ParticipantPings?
   casts       ParticipantCasts?
   challenges ParticipantChallenges?
-  match       Match        @relation(fields: [matchId], references: [matchId])
+  match       Match        @relation(fields: [match_id], references: [match_id])
   summoner    SummonerId   @relation(fields: [puuid], references: [puuid])
 
-  @@id([matchId, puuid])
+  @@id([match_id, puuid])
 }
 
 model ParticipantPerformance {
-  participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
-  matchId                  String
+  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id                  String
   puuid                    String
   champion_level           Int
   gold_earned              Int
@@ -117,12 +117,12 @@ model ParticipantPerformance {
   stealth_wards_placed             Int
   vision_wards_placed Int
 
-  @@id([matchId, puuid])
+  @@id([match_id, puuid])
 }
 
 model ParticipantBuild {
-  participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
-  matchId                  String
+  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id                  String
   puuid                    String
   item_0                   Int
   item_1                   Int
@@ -137,12 +137,12 @@ model ParticipantBuild {
   sight_wards_bought       Int
   vision_wards_bought      Int
 
-  @@id([matchId, puuid])
+  @@id([match_id, puuid])
 }
 
 model ParticipantPings {
-  participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
-  matchId                  String
+  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id                  String
   puuid                    String
   basic_pings              Int
   all_in_pings             Int //yellow crossed swords
@@ -157,12 +157,12 @@ model ParticipantPings {
   on_my_way_pings          Int //blue arrow pointing on ground
   push_pings               Int //green minion
 
-  @@id([matchId, puuid])
+  @@id([match_id, puuid])
 }
 
 model ParticipantCasts {
-  participant              Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
-  matchId                  String
+  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id                  String
   puuid                    String
   spell_1_casts            Int
   spell_2_casts            Int
@@ -171,12 +171,12 @@ model ParticipantCasts {
   summoner_1_casts         Int
   summoner_2_casts         Int
 
-  @@id([matchId, puuid])
+  @@id([match_id, puuid])
 }
 
 model ParticipantChallenges {
-  participant                     Participant @relation(fields: [matchId, puuid], references: [matchId, puuid])
-  matchId                         String
+  participant                     Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id                         String
   puuid                           String
   ability_uses                    Int?
   aces_before_15_minutes          Int?
@@ -203,14 +203,14 @@ model ParticipantChallenges {
   epic_monster_kills_within_30_seconds_of_spawn Int?
   epic_monster_steals             Int?
   epic_monster_stolen_without_smite Int?
-  first_turret_killed             Boolean?
+  first_turret_killed             Int?
   first_turret_killed_time        Float?
   flawless_aces                   Int?
   full_team_takedown              Int?
   game_length                     Float?
   get_takedowns_in_all_lanes_early_jungle_as_laner Int?
   gold_per_minute                 Float?
-  had_open_nexus                  Boolean?
+  had_open_nexus                  Int?
   immobilize_and_kill_with_ally   Int?
   initial_buff_count              Int?
   initial_crab_count              Int?
@@ -285,5 +285,5 @@ model ParticipantChallenges {
   ward_takedowns_before_20m       Int?
   wards_guarded                   Int?
 
-  @@id([matchId, puuid])
+  @@id([match_id, puuid])
 }
