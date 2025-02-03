@@ -70,7 +70,6 @@ export const createMatches = async (summonerName, tag) => {
                     champion_level: participant.champLevel,
                     gold_earned: participant.goldEarned,
                     gold_spent:participant.goldSpent,
-                    level: participant.summonerLevel,
                     kills: participant.kills,
                     deaths: participant.deaths,
                     assists: participant.assists,
@@ -302,12 +301,38 @@ export const getMatchesForSummoner = async (summonerName, tag, numOfMatches) => 
         },
         include: {
             participants: {
+                omit: {match_id: true},
                 include: {
-                    performance: true,
-                    build: true,
-                    pings: true,
-                    casts: true,
-                    challenges: true
+                    performance: {
+                        omit: {
+                            match_id: true,
+                            puuid: true
+                        }
+                    },
+                    build: {
+                        omit: {
+                            match_id: true,
+                            puuid: true
+                        }
+                    },
+                    pings: {
+                        omit: {
+                            match_id: true,
+                            puuid: true
+                        }
+                    },
+                    casts: {
+                        omit: {
+                            match_id: true,
+                            puuid: true
+                        }
+                    },
+                    challenges: {
+                        omit: {
+                            match_id: true,
+                            puuid: true
+                        }
+                    }
                 }
             }
         },
