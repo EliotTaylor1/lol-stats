@@ -84,7 +84,6 @@ model ParticipantPerformance {
   champion_level           Int
   gold_earned              Int
   gold_spent               Int
-  level                    Int
   kills                    Int
   deaths                   Int
   assists                  Int
