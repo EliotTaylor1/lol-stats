@@ -47,13 +47,64 @@ export const createSummoner = async (summonerName, region, tag) => {
     })
 }
 
-export const getSummoner = async (summonerName, tag) => {
-    const summoner = await prisma.summonerId.findUnique({
+export const createSummonerFromPuuid = async puuid => {
+    const accountResponse = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-puuid/${puuid}`, {
+        headers: { 
+            "X-Riot-Token": process.env.RG_API_KEY 
+        }
+    })
+    const accountData = await accountResponse.json()
+
+    const summonerResponse = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`, {
+        headers: { 
+            "X-Riot-Token": process.env.RG_API_KEY 
+        }
+    })
+    const summonerData = await summonerResponse.json()
+
+    await prisma.summonerId.create({
+        data: {
+            puuid: puuid,
+            summoner_name: accountData.gameName,
+            summoner_tag: accountData.tagLine,
+            summoner_Id: summonerData.id,
+            account_Id: summonerData.accountId
+        }
+    })
+    await prisma.summonerDetails.create({
+        data: {
+            puuid: puuid,
+            summoner_level: summonerData.summonerLevel,
+            summoner_profileIcon: summonerData.profileIconId
+        }
+    })
+}
+
+export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
+    const puuid = await prisma.summonerId.findUnique({
         where: {
-            summoner_name_tag_unique: {
+            summoner_name_tag_unique : {
                 summoner_name: summonerName,
                 summoner_tag: tag
             }
+        },
+        select: {
+            puuid: true
+        }
+    })
+    if (puuid) {
+        return puuid
+    } else {
+        throw new Error("puuid not found")
+    }
+}
+
+export const getSummoner = async (summonerName, tag) => {
+    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const puuid = puuidData.puuid
+    const summoner = await prisma.summonerId.findUnique({
+        where: {
+            puuid: puuid
         },
         include: {
             details: {
