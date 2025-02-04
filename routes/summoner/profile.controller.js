@@ -62,27 +62,5 @@ router.get('/profiles/:summoner-:tag/matches', async (req, res) => {
         })
     }
 })
-/*
-router.post('/profile/mastery', async (req , res) => {
-    console.log("Got Champions POST request")
-    const {summonerName, tag, region} = req.body
 
-    const account = new RiotAccount(summonerName, tag, region)
-    await account.getPuuid();
-    await account.getAccountInfo();
-
-    const championStats = new ChampionStats(account)
-    await championStats.getChampionStats()
-
-    res.json({
-        status: 'success',
-        data: {
-            summoner: account.summonerName,
-            tag: account.tag,
-            region: account.region,
-            champions: championStats.champions
-        }
-    })
-})
-*/
 export default router

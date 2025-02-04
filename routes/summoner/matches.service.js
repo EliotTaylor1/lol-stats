@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { createSummoner, createSummonerFromPuuid, getSummonerPuuidFromNameTag } from './profile.service.js'
+import { createSummonerFromPuuid, getSummonerPuuidFromNameTag } from './profile.service.js'
 
 const prisma = new PrismaClient()
 
