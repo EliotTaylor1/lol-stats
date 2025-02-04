@@ -1,14 +1,17 @@
 import { PrismaClient } from '@prisma/client'
-import { createSummonerFromPuuid, getSummonerPuuidFromNameTag } from './profile.service.js'
+import { createSummonerFromPuuid, getSummonerPuuidFromNameTag } from '../summoner/profile.service.js'
 
 const prisma = new PrismaClient()
 
-export const createMatches = async (summonerName, tag) => {
+export const createMatches = async (summonerName, tag, numOfMatches) => {
+    if (numOfMatches > 100) {
+        throw new Error("requested number of matches too high")
+    }
     const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
     const puuid = puuidData.puuid
     // get list of matches
     const key = process.env.RG_API_KEY;
-    const matchesResponse = await fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=11`, {
+    const matchesResponse = await fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${numOfMatches}`, {
         headers: {
             "X-Riot-Token": key
         }
@@ -267,42 +270,77 @@ export const createMatches = async (summonerName, tag) => {
     }
 }
 
-export const getMatchesForSummoner = async (summonerName, tag, numOfMatches) => {
-    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const puuid = puuidData.puuid
-    // search for matches where the puuid as a participant & return the requested num of matches
-    const participants = await prisma.participant.findMany({
-        where: { puuid: puuid },
+export const getMatchSummary = async (match_id) => {
+    const match = prisma.match.findUnique({
+        where: {match_id: match_id},
         select: {
-            match_id: true,
-            match: {
+            start: true,
+            duration: true,
+            gamemode: true,
+
+            participants: {
                 select: {
-                    start: true
+                    team_id: true,
+                    win: true,
+                    champion_id: true,
+                    individual_position: true,
+
+                    summoner: {
+                        select: {
+                            summoner_name: true,
+                            summoner_tag: true
+                        }
+                    },
+                    performance: {
+                        select: {
+                            kills: true,
+                            deaths: true,
+                            assists: true,
+                            champion_level: true,
+                            total_damage_to_champions: true,
+                            total_minions_killed: true,
+                            vision_score: true,
+                            wards_killed: true,
+                            stealth_wards_placed: true,
+                            vision_wards_placed: true
+                        }
+                    },
+                    build: {
+                        select: {
+                            item_0: true,
+                            item_1: true,
+                            item_2: true,
+                            item_3: true,
+                            item_4: true,
+                            item_5: true,
+                            item_6: true,
+                            summoner_1_id: true,
+                            summoner_2_id: true
+                        }
+                    }
                 }
             }
-        },
-        orderBy: {
-            match: {
-                start: 'desc'
-            }
-        },
-        take: numOfMatches
-    });
-
-    if (participants.length === 0) {
-        throw new Error("No matches found")
+        }
+    })
+    if (!match) {
+        throw new Error("match not found")
     }
-    // map down to just match ids
-    const matchIds = participants.map(p => p.match_id)
-    // iterate through each match id and return all data for all participants in each match
-    const matches = await prisma.match.findMany({
-        where: {
-            match_id: { in: matchIds }
-        },
+    return match
+}
+
+export const getMatchDetails = async (match_id) => {
+    const match = prisma.match.findUnique({
+        where: {match_id: match_id},
         include: {
             participants: {
                 omit: {match_id: true},
                 include: {
+                    summoner: {
+                        select: {
+                            summoner_name: true,
+                            summoner_tag: true
+                        }
+                    },
                     performance: {
                         omit: {
                             match_id: true,
@@ -335,11 +373,41 @@ export const getMatchesForSummoner = async (summonerName, tag, numOfMatches) => 
                     }
                 }
             }
-        },
-        orderBy: {
-            start: 'desc'
         }
     })
+    if (!match) {
+        throw new Error("match not found")
+    }
+    return match
+}
 
-    return matches
+export const getMatches = async (summonerName, tag, numOfMatches) => {
+    // convert string to Number and check it's valid
+    numOfMatches = Number(numOfMatches)
+    if (isNaN(numOfMatches)) {
+        throw new Error("Invalid numOfMatches given")
+    }
+    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const puuid = puuidData.puuid
+
+    const participants = await prisma.participant.findMany({
+        where: { puuid: puuid },
+        select: {
+            match_id: true,
+        },
+        orderBy: {
+            match: {
+                start: 'desc'
+            }
+        },
+        take: numOfMatches
+    });
+
+    if (participants.length === 0) {
+        throw new Error("No matches found")
+    }
+    // map down to just match ids
+    const matchIds = participants.map(p => p.match_id)
+
+    return matchIds
 }
