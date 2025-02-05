@@ -24,3 +24,4 @@ NODE_ENV=//production or development
 > `http://localhost:3000/`  
 > and you should get a response:  
 > `Success: API is working`  
+4. If your app container doesn't start correctly on the first run, restart the containers and it should run properly afterwards
