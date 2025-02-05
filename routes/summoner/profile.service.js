@@ -9,6 +9,11 @@ export const createSummoner = async (summonerName, region, tag) => {
             "X-Riot-Token": key
         }
     })
+
+    if (!accountsResponse.ok) {
+        throw new Error(`Failed to fetch account details ${accountsResponse.status}`)
+    }
+
     const accountsData = await accountsResponse.json()
 
     const existingRecord = await prisma.summonerId.findUnique({
@@ -16,9 +21,8 @@ export const createSummoner = async (summonerName, region, tag) => {
             puuid: accountsData.puuid
         }
     })
-
     if (existingRecord) {
-        throw new Error("Summoner already exists")
+        throw new Error(`${accountsData.puuid} already exists in SummonerId table`)
     }
 
     const summonersResponse = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${accountsData.puuid}`, {
@@ -26,6 +30,11 @@ export const createSummoner = async (summonerName, region, tag) => {
             "X-Riot-Token": key
         }
     })
+
+    if (!summonersResponse.ok) {
+        throw new Error(`Failed to fetch summoner details ${summonersResponse.status}`)
+    }
+
     const summonersData = await summonersResponse.json()
 
     await prisma.summonerId.create({
@@ -53,6 +62,11 @@ export const createSummonerFromPuuid = async puuid => {
             "X-Riot-Token": process.env.RG_API_KEY 
         }
     })
+
+    if (!accountResponse.ok) {
+        throw new Error(`Failed to fetch account details ${accountResponse.status}`)
+    }
+
     const accountData = await accountResponse.json()
 
     const summonerResponse = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`, {
@@ -60,6 +74,11 @@ export const createSummonerFromPuuid = async puuid => {
             "X-Riot-Token": process.env.RG_API_KEY 
         }
     })
+
+    if (!summonerResponse.ok) {
+        throw new Error(`Failed to fetch summoner details ${summonerResponse.status}`)
+    }
+
     const summonerData = await summonerResponse.json()
 
     await prisma.summonerId.create({
@@ -92,11 +111,11 @@ export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
             puuid: true
         }
     })
-    if (puuid) {
-        return puuid
-    } else {
-        throw new Error("puuid not found")
+
+    if (!puuid) {
+        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
     }
+    return puuid
 }
 
 export const getSummoner = async (summonerName, tag) => {
@@ -116,9 +135,6 @@ export const getSummoner = async (summonerName, tag) => {
         }
     })
 
-    if (summoner === null) {
-        throw new Error("Summoner not found")
-    }
     return {
         ...summoner,
         ...summoner.details,
@@ -145,6 +161,11 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
             "X-Riot-Token": key
         }
     })
+
+    if (!matchesResponse.ok) {
+        throw new Error(`Failed to fetch list of matches ${matchesResponse.status}`)
+    }
+
     const matches = await matchesResponse.json()
 
     // iterate through each match to get the details
@@ -160,6 +181,11 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
                 "X-Riot-Token": key
             }
         })
+
+        if (!matchDetailsResponse.ok) {
+            throw new Error(`failed to get data for ${match} - ${matchDetailsResponse.status}`)
+        }
+
         const matchDetails = await matchDetailsResponse.json()
 
         await prisma.Match.create({
@@ -422,7 +448,7 @@ export const getMatches = async (summonerName, tag, numOfMatches) => {
     });
 
     if (participants.length === 0) {
-        throw new Error("No matches found")
+        throw new Error(`No matches found in Participant table for ${puuid}`)
     }
     // map down to just match ids
     const matchIds = participants.map(p => p.match_id)

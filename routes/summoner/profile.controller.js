@@ -8,13 +8,15 @@ router.post('/createUser', async (req, res) => {
     const {summonerName, tag, region} = req.body
     try {
         await createSummoner(summonerName, tag, region)
+        res.status(201)
         res.json({
-            status:'Summoner added'
+            status: 'Summoner added'
         })
     } catch (e) {
         console.log(e)
+        res.status(500)
         res.json({
-            status:'Summoner already exists'
+            error: 'Internal server error'
         })
     }
 })
@@ -23,11 +25,13 @@ router.get('/profile/:summoner-:tag', async (req, res) => {
     console.log(`Got /profile/${req.params.summoner}-${req.params.tag} GET request`)
     try {
         const summoner = await getSummoner(req.params.summoner, req.params.tag)
+        res.status(200)
         res.json({summoner})
     } catch (e) {
         console.log(e)
+        res.status(404)
         res.json({
-            status:'Summoner not found'
+            error: 'Summoner not found'
         })
     }
 })
@@ -36,11 +40,13 @@ router.get('/profile/:summoner-:tag/matches', async (req, res) => {
     console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/matches GET request`)
     try {
         const matches = await getMatches(req.params.summoner, req.params.tag, req.query.numOfMatches || 10)
+        res.status(200)
         res.json(matches)
     } catch (e) {
         console.log(e)
+        res.status(404)
         res.json({
-            status: 'Failed to get matches'
+            error: 'Summoner not found'
         })
     }
 })
@@ -49,13 +55,15 @@ router.post('/profile/:summoner-:tag/matches', async (req, res) => {
     console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/matches POST request`)
     try {
         await createMatches(req.params.summoner, req.params.tag, req.query.numOfMatches || 10)
+        res.status(201)
         res.json({
-            status: 'matches fetched'
+            status: 'matches created'
         })
     } catch (e) {
         console.log(e)
+        res.status(500)
         res.json({
-            status: 'failed to create matches'
+            error: 'Internal server error'
         })
     }
 })

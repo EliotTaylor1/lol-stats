@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export const getMatchSummary = async (match_id) => {
-    const match = prisma.match.findUnique({
+    const match = await prisma.match.findUnique({
         where: {match_id: match_id},
         select: {
             start: true,
@@ -55,13 +55,13 @@ export const getMatchSummary = async (match_id) => {
         }
     })
     if (!match) {
-        throw new Error("match not found")
+        throw new Error(`${match_id} does not exist in Match table`)
     }
     return match
 }
 
 export const getMatchDetails = async (match_id) => {
-    const match = prisma.match.findUnique({
+    const match = await prisma.match.findUnique({
         where: {match_id: match_id},
         include: {
             participants: {
@@ -108,7 +108,7 @@ export const getMatchDetails = async (match_id) => {
         }
     })
     if (!match) {
-        throw new Error("match not found")
+        throw new Error(`${match_id} does not exist in Match table`)
     }
     return match
 }
