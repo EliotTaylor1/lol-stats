@@ -1,6 +1,6 @@
 # LoL Stats
 LoL Stats is a full stack app which uses the Riot Games API to get stats for a League of Legends player.
-Backend: Node.JS, Express, Prisma, PostgreSQL
+Backend: Node.js, Express, Prisma, PostgreSQL  
 Frontend (WIP): React
 
 ---
@@ -24,4 +24,4 @@ NODE_ENV=//production or development
 > `http://localhost:3000/`  
 > and you should get a response:  
 > `Success: API is working`  
-4. **OPTIONAL:** The database has some default data in it. run `npx prisma migrate reset` to start fresh
+4. **OPTIONAL:** The database has some default data in it. Run `npx prisma migrate reset` in your `app` container to start fresh
