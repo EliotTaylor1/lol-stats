@@ -40,8 +40,8 @@ export const createSummoner = async (summonerName, region, tag) => {
     await prisma.summonerId.create({
         data : {
             puuid: accountsData.puuid,
-            summoner_Id: summonersData.id,
-            account_Id: summonersData.accountId,
+            summoner_id: summonersData.id,
+            account_id: summonersData.accountId,
             summoner_name: summonerName,
             summoner_tag: tag
         }
@@ -86,8 +86,8 @@ export const createSummonerFromPuuid = async puuid => {
             puuid: puuid,
             summoner_name: accountData.gameName,
             summoner_tag: accountData.tagLine,
-            summoner_Id: summonerData.id,
-            account_Id: summonerData.accountId
+            summoner_id: summonerData.id,
+            account_id: summonerData.accountId
         }
     })
     await prisma.summonerDetails.create({
