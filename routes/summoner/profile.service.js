@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const createSummoner = async (summonerName, region, tag) => {
+export const createSummoner = async (summonerName, tag) => {
     const key = process.env.RG_API_KEY;
     const accountsResponse = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tag}`, {
         headers: {
@@ -51,7 +51,7 @@ export const createSummoner = async (summonerName, region, tag) => {
         data: {
             puuid: accountsData.puuid,
             summoner_level: summonersData.summonerLevel,
-            summoner_profileIcon: summonersData.profileIconId
+            summoner_profile_icon: summonersData.profileIconId
         }
     })
 }
@@ -94,7 +94,7 @@ export const createSummonerFromPuuid = async puuid => {
         data: {
             puuid: puuid,
             summoner_level: summonerData.summonerLevel,
-            summoner_profileIcon: summonerData.profileIconId
+            summoner_profile_icon: summonerData.profileIconId
         }
     })
 }
@@ -129,7 +129,7 @@ export const getSummoner = async (summonerName, tag) => {
             details: {
                 select: {
                     summoner_level: true,
-                    summoner_profileIcon: true
+                    summoner_profile_icon: true
                 }
             }
         }
