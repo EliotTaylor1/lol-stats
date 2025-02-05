@@ -16,8 +16,8 @@ datasource db {
 model SummonerId {
   id             Int              @id @default(autoincrement())
   puuid          String           @unique
-  summoner_Id    String           @unique
-  account_Id     String           @unique
+  summoner_id    String           @unique
+  account_id     String           @unique
   summoner_name  String
   summoner_tag   String
   details        SummonerDetails?
@@ -37,12 +37,12 @@ model SummonerDetails {
 model SummonerMastery {
   id             Int        @id @default(autoincrement())
   puuid          String
-  championId     Int
-  championLevel  Int
-  championPoints Int
-  lastPlayTime   BigInt
+  champion_id     Int
+  champion_level  Int
+  champion_points Int
+  lastPlay_time   BigInt
   summoner       SummonerId @relation(fields: [puuid], references: [puuid])
-  @@unique([puuid, championId], name: "summoner_champion_unique")
+  @@unique([puuid, champion_id], name: "summoner_champion_unique")
 }
 
 model Match {
