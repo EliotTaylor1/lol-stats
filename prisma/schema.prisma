@@ -30,7 +30,7 @@ model SummonerDetails {
   id           Int         @id @default(autoincrement())
   puuid        String      @unique
   summoner_level        Int
-  summoner_profileIcon  Int
+  summoner_profile_icon  Int
   summonerId   SummonerId  @relation(fields: [puuid], references: [puuid])
 }
 
@@ -40,7 +40,7 @@ model SummonerMastery {
   champion_id     Int
   champion_level  Int
   champion_points Int
-  lastPlay_time   BigInt
+  last_play_time   BigInt
   summoner       SummonerId @relation(fields: [puuid], references: [puuid])
   @@unique([puuid, champion_id], name: "summoner_champion_unique")
 }
