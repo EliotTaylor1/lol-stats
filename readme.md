@@ -24,4 +24,3 @@ NODE_ENV=//production or development
 > `http://localhost:3000/`  
 > and you should get a response:  
 > `Success: API is working`  
-4. **OPTIONAL:** The database has some default data in it. Run `npx prisma migrate reset` in your `app` container to start fresh
