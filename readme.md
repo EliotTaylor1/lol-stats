@@ -8,10 +8,13 @@ Frontend (WIP): React
 ### ENV
 You should create a `.env` file in the root directory of this project with the following variables:
 ```
-PORT=//Port to run the express app on (3000)
 RG_API_KEY=//Your Riot Games API key (https://developer.riotgames.com/)
-DATABASE_URL=//Your PostgreSQL database URL as defined in your docker-compose.yml (postgresql://user:password@db:5432/mydb)
+PORT=//Port to run the express app on (3000)
 NODE_ENV=//production or development
+DATABASE_URL=//Your PostgreSQL database URL as defined in your docker-compose.yml (postgresql://user:password@db:5432/mydb)
+POSTGRES_USER=//PostgreSQL username (user)
+POSTGRES_PASSWORD=//PostgreSQL password (password)
+POSTGRES_DB=//PostgreSQL database name (mydb)
 ```
 
 ---
@@ -24,4 +27,3 @@ NODE_ENV=//production or development
 > `http://localhost:3000/`  
 > and you should get a response:  
 > `Success: API is working`  
-4. If your app container doesn't start correctly on the first run, restart the containers and it should run properly afterwards
