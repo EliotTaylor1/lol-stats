@@ -1,5 +1,5 @@
 import express from 'express'
-import { createSummoner, getSummoner, getMatches, createMatches } from './profile.service.js'
+import { createSummoner, getSummoner, getMatches, createMatches, getMastery, createMastery } from './profile.service.js'
 
 const router = express.Router()
 
@@ -32,6 +32,38 @@ router.get('/profile/:summoner-:tag', async (req, res) => {
         res.status(404)
         res.json({
             error: 'Summoner not found'
+        })
+    }
+})
+
+router.get('/profile/:summoner-:tag/mastery', async (req, res) => {
+    console.log(`Got /profile/${req.params.summoner}-:${req.params.tag}/mastery GET request`)
+    try {
+        const mastery = await getMastery(req.params.summoner, req.params.tag)
+        res.status(200)
+        res.json({mastery})
+    } catch (e) {
+        console.log(e)
+        res.status(404)
+        res.json({
+            error: 'Summoner not found'
+        })
+    }
+})
+
+router.post('/profile/:summoner-:tag/mastery', async (req, res) => {
+    console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/mastery POST request`)
+    try {
+        await createMastery(req.params.summoner, req.params.tag)
+        res.status(201)
+        res.json({
+            status: 'Mastery created'
+        })
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.json({
+            error: 'Internal server error'
         })
     }
 })

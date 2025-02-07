@@ -46,8 +46,6 @@ export const createSummoner = async (summonerName, tag) => {
     }
 
     const rankData = await rankResponse.json()
-    console.log(rankData)
-    console.log(rankData.length)
 
     await prisma.summonerId.create({
         data : {
@@ -119,8 +117,6 @@ export const createSummonerFromPuuid = async puuid => {
     }
 
     const rankData = await rankResponse.json()
-    console.log(rankData)
-    console.log(rankData.length)
 
     await prisma.summonerId.create({
         data: {
@@ -372,118 +368,121 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
                     summoner_2_casts: participant.summoner2Casts
                 }
             })
-            await prisma.ParticipantChallenges.create({
-                data: {
-                    match_id: match,
-                    puuid: participant.puuid,
-                    ability_uses: participant.challenges.abilityUses,
-                    aces_before_15_minutes: participant.challenges.acesBefore15Minutes,
-                    allied_jungle_monster_kills: participant.challenges.alliedJungleMonsterKills,
-                    baron_takedowns: participant.challenges.baronTakedowns,
-                    blast_cone_opposite_opponent_count: participant.challenges.blastConeOppositeOpponentCount,
-                    bounty_gold: participant.challenges.bountyGold,
-                    buffs_stolen: participant.challenges.buffsStolen,
-                    complete_support_quest_in_time: participant.challenges.completeSupportQuestInTime,
-                    control_wards_placed: participant.challenges.controlWardsPlaced,
-                    damage_per_minute: participant.challenges.damagePerMinute,
-                    damage_taken_on_team_percentage: participant.challenges.damageTakenOnTeamPercentage,
-                    danced_with_rift_herald: participant.challenges.dancedWithRiftHerald,
-                    deaths_by_enemy_champs: participant.challenges.deathsByEnemyChamps,
-                    dodge_skill_shots_small_window: participant.challenges.dodgeSkillShotsSmallWindow,
-                    double_aces: participant.challenges.doubleAces,
-                    dragon_takedowns: participant.challenges.dragonTakedowns,
-                    effective_heal_and_shielding: participant.challenges.effectiveHealAndShielding,
-                    elder_dragon_kills_with_opposing_soul: participant.challenges.elderDragonKillsWithOpposingSoul,
-                    elder_dragon_multikills: participant.challenges.elderDragonMultikills,
-                    enemy_champion_immobilizations: participant.challenges.enemyChampionImmobilizations,
-                    enemy_jungle_monster_kills: participant.challenges.enemyJungleMonsterKills,
-                    epic_monster_kills_near_enemy_jungler: participant.challenges.epicMonsterKillsNearEnemyJungler,
-                    epic_monster_kills_within_30_seconds_of_spawn: participant.challenges.epicMonsterKillsWithin30SecondsOfSpawn,
-                    epic_monster_steals: participant.challenges.epicMonsterSteals,
-                    epic_monster_stolen_without_smite: participant.challenges.epicMonsterStolenWithoutSmite,
-                    first_turret_killed: participant.challenges.firstTurretKilled,
-                    first_turret_killed_time: participant.challenges.firstTurretKilledTime,
-                    flawless_aces: participant.challenges.flawlessAces,
-                    full_team_takedown: participant.challenges.fullTeamTakedown,
-                    game_length: participant.challenges.gameLength,
-                    get_takedowns_in_all_lanes_early_jungle_as_laner: participant.challenges.getTakedownsInAllLanesEarlyJungleAsLaner,
-                    gold_per_minute: participant.challenges.goldPerMinute,
-                    had_open_nexus: participant.challenges.hadOpenNexus,
-                    immobilize_and_kill_with_ally: participant.challenges.immobilizeAndKillWithAlly,
-                    initial_buff_count: participant.challenges.initialBuffCount,
-                    initial_crab_count: participant.challenges.initialCrabCount,
-                    jungle_cs_before_10_minutes: participant.challenges.jungleCsBefore10Minutes,
-                    jungler_takedowns_near_damaged_epic_monster: participant.challenges.junglerTakedownsNearDamagedEpicMonster,
-                    k_turrets_destroyed_before_plates_fall: participant.challenges.kTurretsDestroyedBeforePlatesFall,
-                    kda: participant.challenges.kda,
-                    kill_after_hidden_with_ally: participant.challenges.killAfterHiddenWithAlly,
-                    kill_participation: participant.challenges.killParticipation,
-                    killed_champ_took_full_team_damage_survived: participant.challenges.killedChampTookFullTeamDamageSurvived,
-                    killing_sprees: participant.challenges.killingSprees,
-                    kills_near_enemy_turret: participant.challenges.killsNearEnemyTurret,
-                    kills_on_other_lanes_early_jungle_as_laner: participant.challenges.killsOnOtherLanesEarlyJungleAsLaner,
-                    kills_on_recently_healed_by_aram_pack: participant.challenges.killsOnRecentlyHealedByAramPack,
-                    kills_under_own_turret: participant.challenges.killsUnderOwnTurret,
-                    kills_with_help_from_epic_monster: participant.challenges.killsWithHelpFromEpicMonster,
-                    knock_enemy_into_team_and_kill: participant.challenges.knockEnemyIntoTeamAndKill,
-                    land_skill_shots_early_game: participant.challenges.landSkillShotsEarlyGame,
-                    lane_minions_first_10_minutes: participant.challenges.laneMinionsFirst10Minutes,
-                    legendary_count: participant.challenges.legendaryCount,
-                    lost_an_inhibitor: participant.challenges.lostAnInhibitor,
-                    max_kill_deficit: participant.challenges.maxKillDeficit,
-                    mejais_full_stack_in_time: participant.challenges.mejaisFullStackInTime,
-                    more_enemy_jungle_than_opponent: participant.challenges.moreEnemyJungleThanOpponent,
-                    multi_kill_one_spell: participant.challenges.multiKillOneSpell,
-                    multi_turret_rift_herald_count: participant.challenges.multiTurretRiftHeraldCount,
-                    multikills: participant.challenges.multikills,
-                    multikills_after_aggressive_flash: participant.challenges.multikillsAfterAggressiveFlash,
-                    outer_turret_executes_before_10_minutes: participant.challenges.outerTurretExecutesBefore10Minutes,
-                    outnumbered_kills: participant.challenges.outnumberedKills,
-                    outnumbered_nexus_kill: participant.challenges.outnumberedNexusKill,
-                    perfect_dragon_souls_taken: participant.challenges.perfectDragonSoulsTaken,
-                    perfect_game: participant.challenges.perfectGame,
-                    pick_kill_with_ally: participant.challenges.pickKillWithAlly,
-                    poro_explosions: participant.challenges.poroExplosions,
-                    quick_cleanse: participant.challenges.quickCleanse,
-                    quick_first_turret: participant.challenges.quickFirstTurret,
-                    quick_solo_kills: participant.challenges.quickSoloKills,
-                    rift_herald_takedowns: participant.challenges.riftHeraldTakedowns,
-                    save_ally_from_death: participant.challenges.saveAllyFromDeath,
-                    scuttle_crab_kills: participant.challenges.scuttleCrabKills,
-                    shortest_time_to_ace_from_first_takedown: participant.challenges.shortestTimeToAceFromFirstTakedown,
-                    skillshots_dodged: participant.challenges.skillshotsDodged,
-                    skillshots_hit: participant.challenges.skillshotsHit,
-                    snowballs_hit: participant.challenges.snowballsHit,
-                    solo_baron_kills: participant.challenges.soloBaronKills,
-                    solo_kills: participant.challenges.soloKills,
-                    stealth_wards_placed: participant.challenges.stealthWardsPlaced,
-                    survived_single_digit_hp_count: participant.challenges.survivedSingleDigitHpCount,
-                    survived_three_immobilizes_in_fight: participant.challenges.survivedThreeImmobilizesInFight,
-                    takedown_on_first_turret: participant.challenges.takedownOnFirstTurret,
-                    takedowns: participant.challenges.takedowns,
-                    takedowns_after_gaining_level_advantage: participant.challenges.takedownsAfterGainingLevelAdvantage,
-                    takedowns_before_jungle_minion_spawn: participant.challenges.takedownsBeforeJungleMinionSpawn,
-                    takedowns_first_x_minutes: participant.challenges.takedownsFirstXMinutes,
-                    takedowns_in_alcove: participant.challenges.takedownsInAlcove,
-                    takedowns_in_enemy_fountain: participant.challenges.takedownsInEnemyFountain,
-                    team_baron_kills: participant.challenges.teamBaronKills,
-                    team_damage_percentage: participant.challenges.teamDamagePercentage,
-                    team_elder_dragon_kills: participant.challenges.teamElderDragonKills,
-                    team_rift_herald_kills: participant.challenges.teamRiftHeraldKills,
-                    took_large_damage_survived: participant.challenges.tookLargeDamageSurvived,
-                    turret_plates_taken: participant.challenges.turretPlatesTaken,
-                    turret_takedowns: participant.challenges.turretTakedowns,
-                    turrets_taken_with_rift_herald: participant.challenges.turretsTakenWithRiftHerald,
-                    twenty_minions_in_3_seconds_count: participant.challenges.twentyMinionsIn3SecondsCount,
-                    two_wards_one_sweeper_count: participant.challenges.twoWardsOneSweeperCount,
-                    unseen_recalls: participant.challenges.unseenRecalls,
-                    vision_score_per_minute: participant.challenges.visionScorePerMinute,
-                    void_monster_kill: participant.challenges.voidMonsterKill,
-                    ward_takedowns: participant.challenges.wardTakedowns,
-                    ward_takedowns_before_20m: participant.challenges.wardTakedownsBefore20M,
-                    wards_guarded: participant.challenges.wardsGuarded
-                }
-            })
+            // URF doesn't record challenges
+            if (matchDetails.info.gameMode != "URF") {
+                await prisma.ParticipantChallenges.create({
+                    data: {
+                        match_id: match,
+                        puuid: participant.puuid,
+                        ability_uses: participant.challenges.abilityUses,
+                        aces_before_15_minutes: participant.challenges.acesBefore15Minutes,
+                        allied_jungle_monster_kills: participant.challenges.alliedJungleMonsterKills,
+                        baron_takedowns: participant.challenges.baronTakedowns,
+                        blast_cone_opposite_opponent_count: participant.challenges.blastConeOppositeOpponentCount,
+                        bounty_gold: participant.challenges.bountyGold,
+                        buffs_stolen: participant.challenges.buffsStolen,
+                        complete_support_quest_in_time: participant.challenges.completeSupportQuestInTime,
+                        control_wards_placed: participant.challenges.controlWardsPlaced,
+                        damage_per_minute: participant.challenges.damagePerMinute,
+                        damage_taken_on_team_percentage: participant.challenges.damageTakenOnTeamPercentage,
+                        danced_with_rift_herald: participant.challenges.dancedWithRiftHerald,
+                        deaths_by_enemy_champs: participant.challenges.deathsByEnemyChamps,
+                        dodge_skill_shots_small_window: participant.challenges.dodgeSkillShotsSmallWindow,
+                        double_aces: participant.challenges.doubleAces,
+                        dragon_takedowns: participant.challenges.dragonTakedowns,
+                        effective_heal_and_shielding: participant.challenges.effectiveHealAndShielding,
+                        elder_dragon_kills_with_opposing_soul: participant.challenges.elderDragonKillsWithOpposingSoul,
+                        elder_dragon_multikills: participant.challenges.elderDragonMultikills,
+                        enemy_champion_immobilizations: participant.challenges.enemyChampionImmobilizations,
+                        enemy_jungle_monster_kills: participant.challenges.enemyJungleMonsterKills,
+                        epic_monster_kills_near_enemy_jungler: participant.challenges.epicMonsterKillsNearEnemyJungler,
+                        epic_monster_kills_within_30_seconds_of_spawn: participant.challenges.epicMonsterKillsWithin30SecondsOfSpawn,
+                        epic_monster_steals: participant.challenges.epicMonsterSteals,
+                        epic_monster_stolen_without_smite: participant.challenges.epicMonsterStolenWithoutSmite,
+                        first_turret_killed: participant.challenges.firstTurretKilled,
+                        first_turret_killed_time: participant.challenges.firstTurretKilledTime,
+                        flawless_aces: participant.challenges.flawlessAces,
+                        full_team_takedown: participant.challenges.fullTeamTakedown,
+                        game_length: participant.challenges.gameLength,
+                        get_takedowns_in_all_lanes_early_jungle_as_laner: participant.challenges.getTakedownsInAllLanesEarlyJungleAsLaner,
+                        gold_per_minute: participant.challenges.goldPerMinute,
+                        had_open_nexus: participant.challenges.hadOpenNexus,
+                        immobilize_and_kill_with_ally: participant.challenges.immobilizeAndKillWithAlly,
+                        initial_buff_count: participant.challenges.initialBuffCount,
+                        initial_crab_count: participant.challenges.initialCrabCount,
+                        jungle_cs_before_10_minutes: participant.challenges.jungleCsBefore10Minutes,
+                        jungler_takedowns_near_damaged_epic_monster: participant.challenges.junglerTakedownsNearDamagedEpicMonster,
+                        k_turrets_destroyed_before_plates_fall: participant.challenges.kTurretsDestroyedBeforePlatesFall,
+                        kda: participant.challenges.kda,
+                        kill_after_hidden_with_ally: participant.challenges.killAfterHiddenWithAlly,
+                        kill_participation: participant.challenges.killParticipation,
+                        killed_champ_took_full_team_damage_survived: participant.challenges.killedChampTookFullTeamDamageSurvived,
+                        killing_sprees: participant.challenges.killingSprees,
+                        kills_near_enemy_turret: participant.challenges.killsNearEnemyTurret,
+                        kills_on_other_lanes_early_jungle_as_laner: participant.challenges.killsOnOtherLanesEarlyJungleAsLaner,
+                        kills_on_recently_healed_by_aram_pack: participant.challenges.killsOnRecentlyHealedByAramPack,
+                        kills_under_own_turret: participant.challenges.killsUnderOwnTurret,
+                        kills_with_help_from_epic_monster: participant.challenges.killsWithHelpFromEpicMonster,
+                        knock_enemy_into_team_and_kill: participant.challenges.knockEnemyIntoTeamAndKill,
+                        land_skill_shots_early_game: participant.challenges.landSkillShotsEarlyGame,
+                        lane_minions_first_10_minutes: participant.challenges.laneMinionsFirst10Minutes,
+                        legendary_count: participant.challenges.legendaryCount,
+                        lost_an_inhibitor: participant.challenges.lostAnInhibitor,
+                        max_kill_deficit: participant.challenges.maxKillDeficit,
+                        mejais_full_stack_in_time: participant.challenges.mejaisFullStackInTime,
+                        more_enemy_jungle_than_opponent: participant.challenges.moreEnemyJungleThanOpponent,
+                        multi_kill_one_spell: participant.challenges.multiKillOneSpell,
+                        multi_turret_rift_herald_count: participant.challenges.multiTurretRiftHeraldCount,
+                        multikills: participant.challenges.multikills,
+                        multikills_after_aggressive_flash: participant.challenges.multikillsAfterAggressiveFlash,
+                        outer_turret_executes_before_10_minutes: participant.challenges.outerTurretExecutesBefore10Minutes,
+                        outnumbered_kills: participant.challenges.outnumberedKills,
+                        outnumbered_nexus_kill: participant.challenges.outnumberedNexusKill,
+                        perfect_dragon_souls_taken: participant.challenges.perfectDragonSoulsTaken,
+                        perfect_game: participant.challenges.perfectGame,
+                        pick_kill_with_ally: participant.challenges.pickKillWithAlly,
+                        poro_explosions: participant.challenges.poroExplosions,
+                        quick_cleanse: participant.challenges.quickCleanse,
+                        quick_first_turret: participant.challenges.quickFirstTurret,
+                        quick_solo_kills: participant.challenges.quickSoloKills,
+                        rift_herald_takedowns: participant.challenges.riftHeraldTakedowns,
+                        save_ally_from_death: participant.challenges.saveAllyFromDeath,
+                        scuttle_crab_kills: participant.challenges.scuttleCrabKills,
+                        shortest_time_to_ace_from_first_takedown: participant.challenges.shortestTimeToAceFromFirstTakedown,
+                        skillshots_dodged: participant.challenges.skillshotsDodged,
+                        skillshots_hit: participant.challenges.skillshotsHit,
+                        snowballs_hit: participant.challenges.snowballsHit,
+                        solo_baron_kills: participant.challenges.soloBaronKills,
+                        solo_kills: participant.challenges.soloKills,
+                        stealth_wards_placed: participant.challenges.stealthWardsPlaced,
+                        survived_single_digit_hp_count: participant.challenges.survivedSingleDigitHpCount,
+                        survived_three_immobilizes_in_fight: participant.challenges.survivedThreeImmobilizesInFight,
+                        takedown_on_first_turret: participant.challenges.takedownOnFirstTurret,
+                        takedowns: participant.challenges.takedowns,
+                        takedowns_after_gaining_level_advantage: participant.challenges.takedownsAfterGainingLevelAdvantage,
+                        takedowns_before_jungle_minion_spawn: participant.challenges.takedownsBeforeJungleMinionSpawn,
+                        takedowns_first_x_minutes: participant.challenges.takedownsFirstXMinutes,
+                        takedowns_in_alcove: participant.challenges.takedownsInAlcove,
+                        takedowns_in_enemy_fountain: participant.challenges.takedownsInEnemyFountain,
+                        team_baron_kills: participant.challenges.teamBaronKills,
+                        team_damage_percentage: participant.challenges.teamDamagePercentage,
+                        team_elder_dragon_kills: participant.challenges.teamElderDragonKills,
+                        team_rift_herald_kills: participant.challenges.teamRiftHeraldKills,
+                        took_large_damage_survived: participant.challenges.tookLargeDamageSurvived,
+                        turret_plates_taken: participant.challenges.turretPlatesTaken,
+                        turret_takedowns: participant.challenges.turretTakedowns,
+                        turrets_taken_with_rift_herald: participant.challenges.turretsTakenWithRiftHerald,
+                        twenty_minions_in_3_seconds_count: participant.challenges.twentyMinionsIn3SecondsCount,
+                        two_wards_one_sweeper_count: participant.challenges.twoWardsOneSweeperCount,
+                        unseen_recalls: participant.challenges.unseenRecalls,
+                        vision_score_per_minute: participant.challenges.visionScorePerMinute,
+                        void_monster_kill: participant.challenges.voidMonsterKill,
+                        ward_takedowns: participant.challenges.wardTakedowns,
+                        ward_takedowns_before_20m: participant.challenges.wardTakedownsBefore20M,
+                        wards_guarded: participant.challenges.wardsGuarded
+                    }
+                })
+            }
         }
     }
 }
@@ -517,4 +516,47 @@ export const getMatches = async (summonerName, tag, numOfMatches) => {
     const matchIds = participants.map(p => p.match_id)
 
     return matchIds
+}
+
+export const createMastery = async (summonerName, tag) => {
+    const key = process.env.RG_API_KEY;
+    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const puuid = puuidData.puuid
+    const masteryRequest = await fetch(`https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=5`, {
+        headers: {
+            "X-Riot-Token": key
+        }
+    })
+    if (!masteryRequest.ok) {
+        throw new Error(`Failed to get mastery data ${masteryRequest.status} `)
+    }
+
+    const masteryData = await masteryRequest.json()
+
+    for (let mastery of masteryData) {
+        await prisma.SummonerMastery.create({
+            data: {
+                puuid: puuid,
+                champion_id: mastery.championId,
+                champion_level: mastery.championLevel,
+                champion_points: mastery.championPoints,
+                last_play_time: mastery.lastPlayTime
+            }
+        })
+    }
+}
+
+export const getMastery = async (summonerName, tag) => {
+    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const puuid = puuidData.puuid
+    const masteries = await prisma.SummonerMastery.findMany({
+        where: {
+            puuid: puuid
+        },
+        omit: {
+            id: true,
+            puuid: true
+        }
+    })
+    return masteries
 }
