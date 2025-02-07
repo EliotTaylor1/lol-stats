@@ -23,6 +23,7 @@ model SummonerId {
   details        SummonerDetails?
   masteries      SummonerMastery[]
   participants Participant[]
+  ranks SummonerRank[]
   @@unique([summoner_name, summoner_tag], name: "summoner_name_tag_unique")
 }
 
@@ -43,6 +44,18 @@ model SummonerMastery {
   last_play_time   BigInt
   summoner       SummonerId @relation(fields: [puuid], references: [puuid])
   @@unique([puuid, champion_id], name: "summoner_champion_unique")
+}
+
+model SummonerRank {
+  summoner_id String
+  queue_type String
+  tier String
+  rank String
+  points Int
+  wins Int
+  losses Int
+  summoner SummonerId @relation(fields: [summoner_id], references: [summoner_id])
+  @@unique([summoner_id, queue_type])
 }
 
 model Match {

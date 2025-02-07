@@ -4,56 +4,83 @@ const prisma = new PrismaClient()
 
 export const createSummoner = async (summonerName, tag) => {
     const key = process.env.RG_API_KEY;
-    const accountsResponse = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tag}`, {
+    const accountResponse = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tag}`, {
         headers: {
             "X-Riot-Token": key
         }
     })
 
-    if (!accountsResponse.ok) {
-        throw new Error(`Failed to fetch account details ${accountsResponse.status}`)
+    if (!accountResponse.ok) {
+        throw new Error(`Failed to fetch account details ${accountResponse.status}`)
     }
 
-    const accountsData = await accountsResponse.json()
+    const accountData = await accountResponse.json()
 
     const existingRecord = await prisma.summonerId.findUnique({
         where: {
-            puuid: accountsData.puuid
+            puuid: accountData.puuid
         }
     })
     if (existingRecord) {
-        throw new Error(`${accountsData.puuid} already exists in SummonerId table`)
+        throw new Error(`${accountData.puuid} already exists in SummonerId table`)
     }
 
-    const summonersResponse = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${accountsData.puuid}`, {
+    const summonerResponse = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${accountData.puuid}`, {
         headers : {
             "X-Riot-Token": key
         }
     })
-
-    if (!summonersResponse.ok) {
-        throw new Error(`Failed to fetch summoner details ${summonersResponse.status}`)
+    if (!summonerResponse.ok) {
+        throw new Error(`Failed to fetch summoner details ${summonerResponse.status}`)
     }
 
-    const summonersData = await summonersResponse.json()
+    const summonerData = await summonerResponse.json()
+
+    const rankResponse = await fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}`, {
+        headers: { 
+            "X-Riot-Token": process.env.RG_API_KEY 
+        }
+    })
+    if (!rankResponse.ok) {
+        throw new Error(`Failed to fetch rank details ${rankResponse.status}`)
+    }
+
+    const rankData = await rankResponse.json()
+    console.log(rankData)
+    console.log(rankData.length)
 
     await prisma.summonerId.create({
         data : {
-            puuid: accountsData.puuid,
-            summoner_id: summonersData.id,
-            account_id: summonersData.accountId,
+            puuid: accountData.puuid,
+            summoner_id: summonerData.id,
+            account_id: summonerData.accountId,
             summoner_name: summonerName,
             summoner_tag: tag
         }
     })
-
     await prisma.summonerDetails.create({
         data: {
-            puuid: accountsData.puuid,
-            summoner_level: summonersData.summonerLevel,
-            summoner_profile_icon: summonersData.profileIconId
+            puuid: accountData.puuid,
+            summoner_level: summonerData.summonerLevel,
+            summoner_profile_icon: summonerData.profileIconId
         }
     })
+        //check the summoner has at least 1 rank
+        if (rankData.length > 0) {
+            for (let rank of rankData) {
+                await prisma.summonerRank.create({
+                    data: {
+                        summoner_id: rank.summonerId,
+                        queue_type: rank.queueType,
+                        tier: rank.tier,
+                        rank: rank.rank,
+                        points: rank.leaguePoints,
+                        wins: rank.wins,
+                        losses: rank.losses
+                    }
+                })
+            }
+        }
 }
 
 export const createSummonerFromPuuid = async puuid => {
@@ -81,6 +108,20 @@ export const createSummonerFromPuuid = async puuid => {
 
     const summonerData = await summonerResponse.json()
 
+    const rankResponse = await fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}`, {
+        headers: { 
+            "X-Riot-Token": process.env.RG_API_KEY 
+        }
+    })
+
+    if (!rankResponse.ok) {
+        throw new Error(`Failed to fetch rank details ${rankResponse.status}`)
+    }
+
+    const rankData = await rankResponse.json()
+    console.log(rankData)
+    console.log(rankData.length)
+
     await prisma.summonerId.create({
         data: {
             puuid: puuid,
@@ -97,6 +138,22 @@ export const createSummonerFromPuuid = async puuid => {
             summoner_profile_icon: summonerData.profileIconId
         }
     })
+    //check the summoner has at least 1 rank
+    if (rankData.length > 0) {
+        for (let rank of rankData) {
+            await prisma.summonerRank.create({
+                data: {
+                    summoner_id: rank.summonerId,
+                    queue_type: rank.queueType,
+                    tier: rank.tier,
+                    rank: rank.rank,
+                    points: rank.leaguePoints,
+                    wins: rank.wins,
+                    losses: rank.losses
+                }
+            })
+        }
+    }
 }
 
 export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
@@ -131,6 +188,11 @@ export const getSummoner = async (summonerName, tag) => {
                     summoner_level: true,
                     summoner_profile_icon: true
                 }
+            },
+            ranks: {
+                omit: {
+                    summoner_id: true
+                }
             }
         }
     })
@@ -138,7 +200,8 @@ export const getSummoner = async (summonerName, tag) => {
     return {
         ...summoner,
         ...summoner.details,
-        details: undefined
+        details: undefined,
+        ranks: summoner.ranks
     }
 }
 
