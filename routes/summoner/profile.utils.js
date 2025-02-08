@@ -1,3 +1,7 @@
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
 export const fetchPuuidByNameTag = async (summonerName, tag) => {
     const key = process.env.RG_API_KEY;
     const accountResponse = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tag}`, {
@@ -11,9 +15,7 @@ export const fetchPuuidByNameTag = async (summonerName, tag) => {
     }
 
     const account = await accountResponse.json()
-    return {
-        ...account
-    }
+    return account
 }
 
 export const fetchNameTagByPuuid = async (puuid) => {
@@ -29,9 +31,7 @@ export const fetchNameTagByPuuid = async (puuid) => {
     }
 
     const account = await accountResponse.json()
-    return {
-        ...account
-    }
+    return account
 }
 
 export const fetchSummonerDataByPuuid = async (puuid) => {
@@ -46,9 +46,7 @@ export const fetchSummonerDataByPuuid = async (puuid) => {
     }
 
     const summoner = await summonerResponse.json()
-    return {
-        ...summoner
-    }
+    return summoner
 }
 
 export const fetchRankBySummonerId = async (summonerId) => {
@@ -108,9 +106,7 @@ export const fetchMatchDetails = async (matchId) => {
     }
 
     const matchDetailsData = await matchDetailsResponse.json()
-    return {
-        ...matchDetailsData
-    }
+    return matchDetailsData
 }
 
 export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
