@@ -67,9 +67,7 @@ export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
     if (!puuid) {
         throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
     }
-    return {
-        ...puuid
-    }
+    return puuid
 }
 
 export const getSummoner = async (summonerName, tag) => {
@@ -93,12 +91,7 @@ export const getSummoner = async (summonerName, tag) => {
         }
     })
 
-    return {
-        ...summoner,
-        ...summoner.details,
-        details: undefined,
-        ranks: summoner.ranks
-    }
+    return summoner
 }
 
 export const createMatches = async (summonerName, tag, numOfMatches) => {
