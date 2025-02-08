@@ -65,7 +65,7 @@ export const createSummoner = async (summonerName, tag) => {
     })
         //check the summoner has at least 1 rank
         if (rankData.length > 0) {
-            for (let rank of rankData) {
+            for (const rank of rankData) {
                 await prisma.summonerRank.create({
                     data: {
                         summoner_id: rank.summonerId,
@@ -79,96 +79,6 @@ export const createSummoner = async (summonerName, tag) => {
                 })
             }
         }
-}
-
-export const createSummonerFromPuuid = async puuid => {
-    const accountResponse = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-puuid/${puuid}`, {
-        headers: { 
-            "X-Riot-Token": process.env.RG_API_KEY 
-        }
-    })
-
-    if (!accountResponse.ok) {
-        throw new Error(`Failed to fetch account details ${accountResponse.status}`)
-    }
-
-    const accountData = await accountResponse.json()
-
-    const summonerResponse = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`, {
-        headers: { 
-            "X-Riot-Token": process.env.RG_API_KEY 
-        }
-    })
-
-    if (!summonerResponse.ok) {
-        throw new Error(`Failed to fetch summoner details ${summonerResponse.status}`)
-    }
-
-    const summonerData = await summonerResponse.json()
-
-    const rankResponse = await fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}`, {
-        headers: { 
-            "X-Riot-Token": process.env.RG_API_KEY 
-        }
-    })
-
-    if (!rankResponse.ok) {
-        throw new Error(`Failed to fetch rank details ${rankResponse.status}`)
-    }
-
-    const rankData = await rankResponse.json()
-
-    await prisma.summonerId.create({
-        data: {
-            puuid: puuid,
-            summoner_name: accountData.gameName,
-            summoner_tag: accountData.tagLine,
-            summoner_id: summonerData.id,
-            account_id: summonerData.accountId
-        }
-    })
-    await prisma.summonerDetails.create({
-        data: {
-            puuid: puuid,
-            summoner_level: summonerData.summonerLevel,
-            summoner_profile_icon: summonerData.profileIconId
-        }
-    })
-    //check the summoner has at least 1 rank
-    if (rankData.length > 0) {
-        for (let rank of rankData) {
-            await prisma.summonerRank.create({
-                data: {
-                    summoner_id: rank.summonerId,
-                    queue_type: rank.queueType,
-                    tier: rank.tier,
-                    rank: rank.rank,
-                    points: rank.leaguePoints,
-                    wins: rank.wins,
-                    losses: rank.losses
-                }
-            })
-        }
-    }
-}
-
-export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
-    const puuid = await prisma.summonerId.findUnique({
-        where: {
-            summoner_name_tag_unique : {
-                summoner_name: summonerName,
-                summoner_tag: tag
-            }
-        },
-        select: {
-            puuid: true
-        }
-    })
-
-    if (!puuid) {
-        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
-    }
-    return puuid
 }
 
 export const getSummoner = async (summonerName, tag) => {
@@ -199,6 +109,40 @@ export const getSummoner = async (summonerName, tag) => {
         details: undefined,
         ranks: summoner.ranks
     }
+}
+
+export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
+    const puuid = await prisma.summonerId.findUnique({
+        where: {
+            summoner_name_tag_unique : {
+                summoner_name: summonerName,
+                summoner_tag: tag
+            }
+        },
+        select: {
+            puuid: true
+        }
+    })
+
+    if (!puuid) {
+        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
+    }
+    return puuid
+}
+
+export const fetchSummonerNameTagFromPuuid = async (puuid) => {
+    const key = process.env.RG_API_KEY
+    const summonerRequest = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-puuid/${puuid}`, {
+        headers: {
+            "X-Riot-Token": key
+        }
+    })
+    const summonerData = await summonerRequest.json()
+    const summoner = {
+        name: summonerData.gameName,
+        tag: summonerData.tagLine
+    }
+    return summoner
 }
 
 export const createMatches = async (summonerName, tag, numOfMatches) => {
@@ -259,13 +203,14 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
             }
         })
         const participants = matchDetails.info.participants
-        for (let participant of participants) {
+        for (const participant of participants) {
             // check if the participant exists 
-            let puuidExists = await prisma.summonerId.findUnique({
+            const puuidExists = await prisma.summonerId.findUnique({
                 where: {puuid: participant.puuid}
             })
             if (!puuidExists) {
-                await createSummonerFromPuuid(participant.puuid)
+                const {name, tag} = await fetchSummonerNameTagFromPuuid(participant.puuid)
+                await createSummoner(name, tag)
             }
             await prisma.Participant.create({
                 data : {
@@ -533,7 +478,7 @@ export const createMastery = async (summonerName, tag) => {
 
     const masteryData = await masteryRequest.json()
 
-    for (let mastery of masteryData) {
+    for (const mastery of masteryData) {
         await prisma.SummonerMastery.create({
             data: {
                 puuid: puuid,
