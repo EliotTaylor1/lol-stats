@@ -1,21 +1,10 @@
 import { PrismaClient } from '@prisma/client'
+import { fetchMasteryByPuuid, fetchMatchDetails, fetchMatchesByPuuid, fetchNameTagByPuuid, fetchPuuidByNameTag, fetchRankBySummonerId, fetchSummonerDataByPuuid } from './profile.utils.js'
 
 const prisma = new PrismaClient()
 
 export const createSummoner = async (summonerName, tag) => {
-    const key = process.env.RG_API_KEY;
-    const accountResponse = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tag}`, {
-        headers: {
-            "X-Riot-Token": key
-        }
-    })
-
-    if (!accountResponse.ok) {
-        throw new Error(`Failed to fetch account details ${accountResponse.status}`)
-    }
-
-    const accountData = await accountResponse.json()
-
+    const accountData = await fetchPuuidByNameTag(summonerName, tag)
     const existingRecord = await prisma.summonerId.findUnique({
         where: {
             puuid: accountData.puuid
@@ -25,27 +14,8 @@ export const createSummoner = async (summonerName, tag) => {
         throw new Error(`${accountData.puuid} already exists in SummonerId table`)
     }
 
-    const summonerResponse = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${accountData.puuid}`, {
-        headers : {
-            "X-Riot-Token": key
-        }
-    })
-    if (!summonerResponse.ok) {
-        throw new Error(`Failed to fetch summoner details ${summonerResponse.status}`)
-    }
-
-    const summonerData = await summonerResponse.json()
-
-    const rankResponse = await fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}`, {
-        headers: { 
-            "X-Riot-Token": process.env.RG_API_KEY 
-        }
-    })
-    if (!rankResponse.ok) {
-        throw new Error(`Failed to fetch rank details ${rankResponse.status}`)
-    }
-
-    const rankData = await rankResponse.json()
+    const summonerData = await fetchSummonerDataByPuuid(accountData.puuid)
+    const rankData = await fetchRankBySummonerId(summonerData.id)
 
     await prisma.summonerId.create({
         data : {
@@ -81,9 +51,29 @@ export const createSummoner = async (summonerName, tag) => {
         }
 }
 
+export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
+    const puuid = await prisma.summonerId.findUnique({
+        where: {
+            summoner_name_tag_unique : {
+                summoner_name: summonerName,
+                summoner_tag: tag
+            }
+        },
+        select: {
+            puuid: true
+        }
+    })
+
+    if (!puuid) {
+        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
+    }
+    return {
+        ...puuid
+    }
+}
+
 export const getSummoner = async (summonerName, tag) => {
-    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const puuid = puuidData.puuid
+    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
     const summoner = await prisma.summonerId.findUnique({
         where: {
             puuid: puuid
@@ -111,40 +101,6 @@ export const getSummoner = async (summonerName, tag) => {
     }
 }
 
-export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
-    const puuid = await prisma.summonerId.findUnique({
-        where: {
-            summoner_name_tag_unique : {
-                summoner_name: summonerName,
-                summoner_tag: tag
-            }
-        },
-        select: {
-            puuid: true
-        }
-    })
-
-    if (!puuid) {
-        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
-    }
-    return puuid
-}
-
-export const fetchSummonerNameTagFromPuuid = async (puuid) => {
-    const key = process.env.RG_API_KEY
-    const summonerRequest = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-puuid/${puuid}`, {
-        headers: {
-            "X-Riot-Token": key
-        }
-    })
-    const summonerData = await summonerRequest.json()
-    const summoner = {
-        name: summonerData.gameName,
-        tag: summonerData.tagLine
-    }
-    return summoner
-}
-
 export const createMatches = async (summonerName, tag, numOfMatches) => {
     // convert string to Number and check it's valid
     numOfMatches = Number(numOfMatches)
@@ -155,41 +111,17 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
         throw new Error("requested number of matches too high")
     }
     
-    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const puuid = puuidData.puuid
-    // get list of matches
-    const key = process.env.RG_API_KEY;
-    const matchesResponse = await fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${numOfMatches}`, {
-        headers: {
-            "X-Riot-Token": key
-        }
-    })
+    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const matches = await fetchMatchesByPuuid(puuid, numOfMatches)
 
-    if (!matchesResponse.ok) {
-        throw new Error(`Failed to fetch list of matches ${matchesResponse.status}`)
-    }
-
-    const matches = await matchesResponse.json()
-
-    // iterate through each match to get the details
     for (let match of matches) {
-        // iterate through each match to check if we already have it in the DB
+        // check if we already have match in the DB
         const existingMatch = await prisma.Match.findUnique({
             where: { match_id: match }
         });
         if (existingMatch) continue;
 
-        const matchDetailsResponse = await fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/${match}`, {
-            headers: {
-                "X-Riot-Token": key
-            }
-        })
-
-        if (!matchDetailsResponse.ok) {
-            throw new Error(`failed to get data for ${match} - ${matchDetailsResponse.status}`)
-        }
-
-        const matchDetails = await matchDetailsResponse.json()
+        const matchDetails = await fetchMatchDetails(match)
 
         await prisma.Match.create({
             data : {
@@ -209,7 +141,7 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
                 where: {puuid: participant.puuid}
             })
             if (!puuidExists) {
-                const {name, tag} = await fetchSummonerNameTagFromPuuid(participant.puuid)
+                const {gameName: name, tagLine: tag} = await fetchNameTagByPuuid(participant.puuid)
                 await createSummoner(name, tag)
             }
             await prisma.Participant.create({
@@ -438,9 +370,7 @@ export const getMatches = async (summonerName, tag, numOfMatches) => {
     if (isNaN(numOfMatches)) {
         throw new Error("Invalid numOfMatches given")
     }
-    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const puuid = puuidData.puuid
-
+    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
     const participants = await prisma.participant.findMany({
         where: { puuid: puuid },
         select: {
@@ -457,27 +387,14 @@ export const getMatches = async (summonerName, tag, numOfMatches) => {
     if (participants.length === 0) {
         throw new Error(`No matches found in Participant table for ${puuid}`)
     }
-    // map down to just match ids
     const matchIds = participants.map(p => p.match_id)
 
     return matchIds
 }
 
-export const createMastery = async (summonerName, tag) => {
-    const key = process.env.RG_API_KEY;
-    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const puuid = puuidData.puuid
-    const masteryRequest = await fetch(`https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=5`, {
-        headers: {
-            "X-Riot-Token": key
-        }
-    })
-    if (!masteryRequest.ok) {
-        throw new Error(`Failed to get mastery data ${masteryRequest.status} `)
-    }
-
-    const masteryData = await masteryRequest.json()
-
+export const createMasteries = async (summonerName, tag) => {
+    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const masteryData = await fetchMasteryByPuuid(puuid)
     for (const mastery of masteryData) {
         await prisma.SummonerMastery.create({
             data: {
@@ -491,9 +408,8 @@ export const createMastery = async (summonerName, tag) => {
     }
 }
 
-export const getMastery = async (summonerName, tag) => {
-    const puuidData = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const puuid = puuidData.puuid
+export const getMasteries = async (summonerName, tag) => {
+    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
     const masteries = await prisma.SummonerMastery.findMany({
         where: {
             puuid: puuid
