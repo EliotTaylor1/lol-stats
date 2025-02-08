@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { fetchMasteryByPuuid, fetchMatchDetails, fetchMatchesByPuuid, fetchNameTagByPuuid, fetchPuuidByNameTag, fetchRankBySummonerId, fetchSummonerDataByPuuid } from './profile.utils.js'
+import { fetchMasteryByPuuid, fetchMatchDetails, fetchMatchesByPuuid, fetchNameTagByPuuid, fetchPuuidByNameTag, fetchRankBySummonerId, fetchSummonerDataByPuuid, getSummonerPuuidFromNameTag } from './profile.utils.js'
 
 const prisma = new PrismaClient()
 
@@ -49,25 +49,6 @@ export const createSummoner = async (summonerName, tag) => {
                 })
             }
         }
-}
-
-export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
-    const puuid = await prisma.summonerId.findUnique({
-        where: {
-            summoner_name_tag_unique : {
-                summoner_name: summonerName,
-                summoner_tag: tag
-            }
-        },
-        select: {
-            puuid: true
-        }
-    })
-
-    if (!puuid) {
-        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
-    }
-    return puuid
 }
 
 export const getSummoner = async (summonerName, tag) => {

@@ -112,3 +112,22 @@ export const fetchMatchDetails = async (matchId) => {
         ...matchDetailsData
     }
 }
+
+export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
+    const puuid = await prisma.summonerId.findUnique({
+        where: {
+            summoner_name_tag_unique : {
+                summoner_name: summonerName,
+                summoner_tag: tag
+            }
+        },
+        select: {
+            puuid: true
+        }
+    })
+
+    if (!puuid) {
+        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
+    }
+    return puuid
+}
