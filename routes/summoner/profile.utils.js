@@ -112,7 +112,7 @@ export const fetchMatchDetails = async (matchId) => {
 export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
     const puuid = await prisma.summonerId.findUnique({
         where: {
-            summoner_name_tag_unique : {
+            summoner_name_summoner_tag : {
                 summoner_name: summonerName,
                 summoner_tag: tag
             }

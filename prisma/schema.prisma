@@ -14,288 +14,299 @@ datasource db {
 }
 
 model SummonerId {
-  id             Int              @id @default(autoincrement())
-  puuid          String           @unique
-  summoner_id    String           @unique
-  account_id     String           @unique
-  summoner_name  String
-  summoner_tag   String
-  details        SummonerDetails?
-  masteries      SummonerMastery[]
-  participants Participant[]
-  ranks SummonerRank[]
-  @@unique([summoner_name, summoner_tag], name: "summoner_name_tag_unique")
+  puuid         String            @id @unique
+  summoner_id   String            @unique
+  account_id    String            @unique
+  summoner_name String
+  summoner_tag  String
+  created_at    DateTime          @default(now())
+  updated_at    DateTime          @updatedAt
+  details       SummonerDetails?
+  masteries     SummonerMastery[]
+  participants  Participant[]
+  ranks         SummonerRank[]
+
+  @@unique([summoner_name, summoner_tag])
 }
 
 model SummonerDetails {
-  id           Int         @id @default(autoincrement())
-  puuid        String      @unique
+  puuid                 String     @id @unique
   summoner_level        Int
-  summoner_profile_icon  Int
-  summonerId   SummonerId  @relation(fields: [puuid], references: [puuid])
+  summoner_profile_icon Int
+  created_at            DateTime   @default(now())
+  updated_at            DateTime   @updatedAt
+  summonerId            SummonerId @relation(fields: [puuid], references: [puuid])
 }
 
 model SummonerMastery {
-  id             Int        @id @default(autoincrement())
-  puuid          String
+  puuid           String
   champion_id     Int
   champion_level  Int
   champion_points Int
-  last_play_time   BigInt
-  summoner       SummonerId @relation(fields: [puuid], references: [puuid])
-  @@unique([puuid, champion_id], name: "summoner_champion_unique")
+  last_play_time  BigInt
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  summoner        SummonerId @relation(fields: [puuid], references: [puuid])
+
+  @@id([puuid, champion_id])
+  @@unique([puuid, champion_id])
 }
 
 model SummonerRank {
   summoner_id String
-  queue_type String
-  tier String
-  rank String
-  points Int
-  wins Int
-  losses Int
-  summoner SummonerId @relation(fields: [summoner_id], references: [summoner_id])
+  queue_type  String
+  tier        String
+  rank        String
+  points      Int
+  wins        Int
+  losses      Int
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  summoner    SummonerId @relation(fields: [summoner_id], references: [summoner_id])
+
+  @@id([summoner_id, queue_type])
   @@unique([summoner_id, queue_type])
 }
 
 model Match {
-  match_id     String      @id @unique
-  start       BigInt
-  end         BigInt
-  duration    Int
-  gamemode    String
-  game_type   String
+  match_id     String        @id @unique
+  start        BigInt
+  end          BigInt
+  duration     Int
+  gamemode     String
+  game_type    String
   game_version String
+  created_at   DateTime      @default(now())
   participants Participant[]
 }
 
 model Participant {
-  match_id     String
-  puuid       String
-  team_id     Int
-  win         Boolean
-  champion_id Int
-  time_played Int
-  lane String
-  role String
+  match_id            String
+  puuid               String
+  team_id             Int
+  win                 Boolean
+  champion_id         Int
+  time_played         Int
+  lane                String
+  role                String
   individual_position String
-  performance ParticipantPerformance?
-  build       ParticipantBuild?
-  pings       ParticipantPings?
-  casts       ParticipantCasts?
-  challenges ParticipantChallenges?
-  match       Match        @relation(fields: [match_id], references: [match_id])
-  summoner    SummonerId   @relation(fields: [puuid], references: [puuid])
+  performance         ParticipantPerformance?
+  build               ParticipantBuild?
+  pings               ParticipantPings?
+  casts               ParticipantCasts?
+  challenges          ParticipantChallenges?
+  match               Match                   @relation(fields: [match_id], references: [match_id])
+  summoner            SummonerId              @relation(fields: [puuid], references: [puuid])
 
   @@id([match_id, puuid])
 }
 
 model ParticipantPerformance {
-  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
-  match_id                  String
-  puuid                    String
-  champion_level           Int
-  gold_earned              Int
-  gold_spent               Int
-  kills                    Int
-  deaths                   Int
-  assists                  Int
-  total_damage             Int
-  total_damage_to_champions Int
-  magic_damage_to_champions Int
-  physical_damage_to_champions Int
-  largest_critical_strike  Int
-  double_kills             Int
-  triple_kills             Int
-  quadra_kills             Int
-  penta_kills              Int
-  largest_killing_spree    Int
-  largest_multi_kill       Int
-  longest_time_living      Int
-  total_time_spent_dead    Int
-  time_ccing_others        Int
-  time_cc_dealt            Int
-  total_minions_killed     Int
-  total_ally_jungle_monsters_killed Int
+  participant                        Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id                           String
+  puuid                              String
+  champion_level                     Int
+  gold_earned                        Int
+  gold_spent                         Int
+  kills                              Int
+  deaths                             Int
+  assists                            Int
+  total_damage                       Int
+  total_damage_to_champions          Int
+  magic_damage_to_champions          Int
+  physical_damage_to_champions       Int
+  largest_critical_strike            Int
+  double_kills                       Int
+  triple_kills                       Int
+  quadra_kills                       Int
+  penta_kills                        Int
+  largest_killing_spree              Int
+  largest_multi_kill                 Int
+  longest_time_living                Int
+  total_time_spent_dead              Int
+  time_ccing_others                  Int
+  time_cc_dealt                      Int
+  total_minions_killed               Int
+  total_ally_jungle_monsters_killed  Int
   total_enemy_jungle_monsters_killed Int
-  first_blood_kill         Boolean
-  first_blood_assist       Boolean
-  turret_kills             Int
-  turret_takedowns         Int
-  objectives_stolen        Int
-  objectives_stolen_assists Int
-  vision_score             Int
-  wards_killed             Int
-  stealth_wards_placed             Int
-  vision_wards_placed Int
+  first_blood_kill                   Boolean
+  first_blood_assist                 Boolean
+  turret_kills                       Int
+  turret_takedowns                   Int
+  objectives_stolen                  Int
+  objectives_stolen_assists          Int
+  vision_score                       Int
+  wards_killed                       Int
+  stealth_wards_placed               Int
+  vision_wards_placed                Int
 
   @@id([match_id, puuid])
 }
 
 model ParticipantBuild {
-  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
-  match_id                  String
-  puuid                    String
-  item_0                   Int
-  item_1                   Int
-  item_2                   Int
-  item_3                   Int
-  item_4                   Int
-  item_5                   Int
-  item_6                   Int
-  summoner_1_id            Int
-  summoner_2_id            Int
-  consumables_purchased    Int
-  sight_wards_bought       Int
-  vision_wards_bought      Int
+  participant           Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id              String
+  puuid                 String
+  item_0                Int
+  item_1                Int
+  item_2                Int
+  item_3                Int
+  item_4                Int
+  item_5                Int
+  item_6                Int
+  summoner_1_id         Int
+  summoner_2_id         Int
+  consumables_purchased Int
+  sight_wards_bought    Int
+  vision_wards_bought   Int
 
   @@id([match_id, puuid])
 }
 
 model ParticipantPings {
-  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
-  match_id                  String
-  puuid                    String
-  basic_pings              Int
-  all_in_pings             Int //yellow crossed swords
-  assist_me_pings          Int //green flag
-  command_pings            Int //blue dot
-  danger_pings             Int //red exclamationmark
-  enemy_missing_pings      Int //yellow questionmark
-  enemy_vision_pings       Int //red eyeball
-  need_vision_pings        Int //green ward
-  fallback_pings           Int //yellow circle with horizontal line
-  hold_pings               Int
-  on_my_way_pings          Int //blue arrow pointing on ground
-  push_pings               Int //green minion
+  participant         Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id            String
+  puuid               String
+  basic_pings         Int
+  all_in_pings        Int //yellow crossed swords
+  assist_me_pings     Int //green flag
+  command_pings       Int //blue dot
+  danger_pings        Int //red exclamationmark
+  enemy_missing_pings Int //yellow questionmark
+  enemy_vision_pings  Int //red eyeball
+  need_vision_pings   Int //green ward
+  fallback_pings      Int //yellow circle with horizontal line
+  hold_pings          Int
+  on_my_way_pings     Int //blue arrow pointing on ground
+  push_pings          Int //green minion
 
   @@id([match_id, puuid])
 }
 
 model ParticipantCasts {
-  participant              Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
-  match_id                  String
-  puuid                    String
-  spell_1_casts            Int
-  spell_2_casts            Int
-  spell_3_casts            Int
-  spell_4_casts            Int
-  summoner_1_casts         Int
-  summoner_2_casts         Int
+  participant      Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id         String
+  puuid            String
+  spell_1_casts    Int
+  spell_2_casts    Int
+  spell_3_casts    Int
+  spell_4_casts    Int
+  summoner_1_casts Int
+  summoner_2_casts Int
 
   @@id([match_id, puuid])
 }
 
 model ParticipantChallenges {
-  participant                     Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
-  match_id                         String
-  puuid                           String
-  ability_uses                    Int?
-  aces_before_15_minutes          Int?
-  allied_jungle_monster_kills     Int?
-  baron_takedowns                 Int?
-  blast_cone_opposite_opponent_count Int?
-  bounty_gold                     Int?
-  buffs_stolen                    Int?
-  complete_support_quest_in_time  Int?
-  control_wards_placed            Int?
-  damage_per_minute               Float?
-  damage_taken_on_team_percentage Float?
-  danced_with_rift_herald         Int?
-  deaths_by_enemy_champs          Int?
-  dodge_skill_shots_small_window  Int?
-  double_aces                     Int?
-  dragon_takedowns                Int?
-  effective_heal_and_shielding    Float?
-  elder_dragon_kills_with_opposing_soul Int?
-  elder_dragon_multikills         Int?
-  enemy_champion_immobilizations  Int?
-  enemy_jungle_monster_kills      Int?
-  epic_monster_kills_near_enemy_jungler Int?
-  epic_monster_kills_within_30_seconds_of_spawn Int?
-  epic_monster_steals             Int?
-  epic_monster_stolen_without_smite Int?
-  first_turret_killed             Int?
-  first_turret_killed_time        Float?
-  flawless_aces                   Int?
-  full_team_takedown              Int?
-  game_length                     Float?
+  participant                                      Participant @relation(fields: [match_id, puuid], references: [match_id, puuid])
+  match_id                                         String
+  puuid                                            String
+  ability_uses                                     Int?
+  aces_before_15_minutes                           Int?
+  allied_jungle_monster_kills                      Int?
+  baron_takedowns                                  Int?
+  blast_cone_opposite_opponent_count               Int?
+  bounty_gold                                      Int?
+  buffs_stolen                                     Int?
+  complete_support_quest_in_time                   Int?
+  control_wards_placed                             Int?
+  damage_per_minute                                Float?
+  damage_taken_on_team_percentage                  Float?
+  danced_with_rift_herald                          Int?
+  deaths_by_enemy_champs                           Int?
+  dodge_skill_shots_small_window                   Int?
+  double_aces                                      Int?
+  dragon_takedowns                                 Int?
+  effective_heal_and_shielding                     Float?
+  elder_dragon_kills_with_opposing_soul            Int?
+  elder_dragon_multikills                          Int?
+  enemy_champion_immobilizations                   Int?
+  enemy_jungle_monster_kills                       Int?
+  epic_monster_kills_near_enemy_jungler            Int?
+  epic_monster_kills_within_30_seconds_of_spawn    Int?
+  epic_monster_steals                              Int?
+  epic_monster_stolen_without_smite                Int?
+  first_turret_killed                              Int?
+  first_turret_killed_time                         Float?
+  flawless_aces                                    Int?
+  full_team_takedown                               Int?
+  game_length                                      Float?
   get_takedowns_in_all_lanes_early_jungle_as_laner Int?
-  gold_per_minute                 Float?
-  had_open_nexus                  Int?
-  immobilize_and_kill_with_ally   Int?
-  initial_buff_count              Int?
-  initial_crab_count              Int?
-  jungle_cs_before_10_minutes     Int?
-  jungler_takedowns_near_damaged_epic_monster Int?
-  k_turrets_destroyed_before_plates_fall Int?
-  kda                             Float?
-  kill_after_hidden_with_ally     Int?
-  kill_participation              Float?
-  killed_champ_took_full_team_damage_survived Int?
-  killing_sprees                  Int?
-  kills_near_enemy_turret         Int?
-  kills_on_other_lanes_early_jungle_as_laner Int?
-  kills_on_recently_healed_by_aram_pack Int?
-  kills_under_own_turret          Int?
-  kills_with_help_from_epic_monster Int?
-  knock_enemy_into_team_and_kill  Int?
-  land_skill_shots_early_game     Int?
-  lane_minions_first_10_minutes   Int?
-  legendary_count                 Int?
-  lost_an_inhibitor               Int?
-  max_kill_deficit                Int?
-  mejais_full_stack_in_time       Int?
-  more_enemy_jungle_than_opponent Int?
-  multi_kill_one_spell            Int?
-  multi_turret_rift_herald_count  Int?
-  multikills                      Int?
-  multikills_after_aggressive_flash Int?
-  outer_turret_executes_before_10_minutes Int?
-  outnumbered_kills               Int?
-  outnumbered_nexus_kill          Int?
-  perfect_dragon_souls_taken      Int?
-  perfect_game                    Int?
-  pick_kill_with_ally             Int?
-  poro_explosions                 Int?
-  quick_cleanse                   Int?
-  quick_first_turret              Int?
-  quick_solo_kills                Int?
-  rift_herald_takedowns           Int?
-  save_ally_from_death            Int?
-  scuttle_crab_kills              Int?
-  shortest_time_to_ace_from_first_takedown Float?
-  skillshots_dodged               Int?
-  skillshots_hit                  Int?
-  snowballs_hit                   Int?
-  solo_baron_kills                Int?
-  solo_kills                      Int?
-  stealth_wards_placed            Int?
-  survived_single_digit_hp_count  Int?
-  survived_three_immobilizes_in_fight Int?
-  takedown_on_first_turret        Int?
-  takedowns                       Int?
-  takedowns_after_gaining_level_advantage Int?
-  takedowns_before_jungle_minion_spawn Int?
-  takedowns_first_x_minutes       Int?
-  takedowns_in_alcove             Int?
-  takedowns_in_enemy_fountain     Int?
-  team_baron_kills                Int?
-  team_damage_percentage          Float?
-  team_elder_dragon_kills         Int?
-  team_rift_herald_kills          Int?
-  took_large_damage_survived      Int?
-  turret_plates_taken             Int?
-  turret_takedowns                Int?
-  turrets_taken_with_rift_herald  Int?
-  twenty_minions_in_3_seconds_count Int?
-  two_wards_one_sweeper_count     Int?
-  unseen_recalls                  Int?
-  vision_score_per_minute         Float?
-  void_monster_kill               Int?
-  ward_takedowns                  Int?
-  ward_takedowns_before_20m       Int?
-  wards_guarded                   Int?
+  gold_per_minute                                  Float?
+  had_open_nexus                                   Int?
+  immobilize_and_kill_with_ally                    Int?
+  initial_buff_count                               Int?
+  initial_crab_count                               Int?
+  jungle_cs_before_10_minutes                      Int?
+  jungler_takedowns_near_damaged_epic_monster      Int?
+  k_turrets_destroyed_before_plates_fall           Int?
+  kda                                              Float?
+  kill_after_hidden_with_ally                      Int?
+  kill_participation                               Float?
+  killed_champ_took_full_team_damage_survived      Int?
+  killing_sprees                                   Int?
+  kills_near_enemy_turret                          Int?
+  kills_on_other_lanes_early_jungle_as_laner       Int?
+  kills_on_recently_healed_by_aram_pack            Int?
+  kills_under_own_turret                           Int?
+  kills_with_help_from_epic_monster                Int?
+  knock_enemy_into_team_and_kill                   Int?
+  land_skill_shots_early_game                      Int?
+  lane_minions_first_10_minutes                    Int?
+  legendary_count                                  Int?
+  lost_an_inhibitor                                Int?
+  max_kill_deficit                                 Int?
+  mejais_full_stack_in_time                        Int?
+  more_enemy_jungle_than_opponent                  Int?
+  multi_kill_one_spell                             Int?
+  multi_turret_rift_herald_count                   Int?
+  multikills                                       Int?
+  multikills_after_aggressive_flash                Int?
+  outer_turret_executes_before_10_minutes          Int?
+  outnumbered_kills                                Int?
+  outnumbered_nexus_kill                           Int?
+  perfect_dragon_souls_taken                       Int?
+  perfect_game                                     Int?
+  pick_kill_with_ally                              Int?
+  poro_explosions                                  Int?
+  quick_cleanse                                    Int?
+  quick_first_turret                               Int?
+  quick_solo_kills                                 Int?
+  rift_herald_takedowns                            Int?
+  save_ally_from_death                             Int?
+  scuttle_crab_kills                               Int?
+  shortest_time_to_ace_from_first_takedown         Float?
+  skillshots_dodged                                Int?
+  skillshots_hit                                   Int?
+  snowballs_hit                                    Int?
+  solo_baron_kills                                 Int?
+  solo_kills                                       Int?
+  stealth_wards_placed                             Int?
+  survived_single_digit_hp_count                   Int?
+  survived_three_immobilizes_in_fight              Int?
+  takedown_on_first_turret                         Int?
+  takedowns                                        Int?
+  takedowns_after_gaining_level_advantage          Int?
+  takedowns_before_jungle_minion_spawn             Int?
+  takedowns_first_x_minutes                        Int?
+  takedowns_in_alcove                              Int?
+  takedowns_in_enemy_fountain                      Int?
+  team_baron_kills                                 Int?
+  team_damage_percentage                           Float?
+  team_elder_dragon_kills                          Int?
+  team_rift_herald_kills                           Int?
+  took_large_damage_survived                       Int?
+  turret_plates_taken                              Int?
+  turret_takedowns                                 Int?
+  turrets_taken_with_rift_herald                   Int?
+  twenty_minions_in_3_seconds_count                Int?
+  two_wards_one_sweeper_count                      Int?
+  unseen_recalls                                   Int?
+  vision_score_per_minute                          Float?
+  void_monster_kill                                Int?
+  ward_takedowns                                   Int?
+  ward_takedowns_before_20m                        Int?
+  wards_guarded                                    Int?
 
   @@id([match_id, puuid])
 }

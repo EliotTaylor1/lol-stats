@@ -406,7 +406,7 @@ export const createMasteries = async (summonerName, tag) => {
     for (const mastery of masteryData) {
         await prisma.SummonerMastery.upsert({
             where: {
-                summoner_champion_unique: {
+                puuid_champion_id: {
                     puuid,
                     champion_id: mastery.championId
                 }
