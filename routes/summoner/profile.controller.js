@@ -5,9 +5,9 @@ const router = express.Router()
 
 router.post('/createUser', async (req, res) => {
     console.log("Got /createUser POST request")
-    const {summonerName, tag} = req.body
+    const {summonerName, tag, platform} = req.body
     try {
-        await createSummoner(summonerName, tag)
+        await createSummoner(summonerName, tag, platform)
         res.status(201)
         res.json({
             status: 'Summoner added'

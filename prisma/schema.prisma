@@ -33,6 +33,8 @@ model SummonerDetails {
   puuid                 String     @id @unique
   summoner_level        Int
   summoner_profile_icon Int
+  region                String
+  platform              String
   created_at            DateTime   @default(now())
   updated_at            DateTime   @updatedAt
   summonerId            SummonerId @relation(fields: [puuid], references: [puuid])
