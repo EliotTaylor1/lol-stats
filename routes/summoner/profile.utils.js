@@ -128,7 +128,7 @@ export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
     if (!puuid) {
         throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
     }
-    return puuid
+    return puuid.puuid
 }
 
 export const getRegionFromPlatform = (platform) => {
@@ -169,7 +169,7 @@ export const getPlatformFromPuuid = async (puuid) => {
     if (!platform) {
         throw new Error(`Failed to get platform. ${puuid} does not exist in SummonerDetails`)
     }
-    return platform
+    return platform.platform
 }
 
 export const getRegionFromPuuid = async (puuid) => {
@@ -184,5 +184,5 @@ export const getRegionFromPuuid = async (puuid) => {
     if (!region) {
         throw new Error(`Failed to get region. ${puuid} does not exist in SummonerDetails`)
     }
-    return region
+    return region.region
 }

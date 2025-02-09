@@ -81,7 +81,7 @@ export const createSummoner = async (summonerName, tag, platform) => {
 }
 
 export const getSummoner = async (summonerName, tag) => {
-    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const puuid = await getSummonerPuuidFromNameTag(summonerName, tag)
     const summoner = await prisma.summonerId.findUnique({
         where: {
             puuid: puuid
@@ -116,8 +116,8 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
         throw new Error("requested number of matches too high")
     }
     
-    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const {region} = await getRegionFromPuuid(puuid)
+    const puuid = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const region = await getRegionFromPuuid(puuid)
     const matches = await fetchMatchesByPuuid(puuid, numOfMatches, region)
 
     for (let match of matches) {
@@ -150,7 +150,7 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
                 const {gameName: name, tagLine: tag} = await fetchNameTagByPuuid(participant.puuid, region)
                 // use the original participant's puuid to get the platform, as all other players must be on the same platform
                 // we also might not have the puuid's in the database yet for the other participants
-                const {platform} = await getPlatformFromPuuid(puuid)
+                const platform = await getPlatformFromPuuid(puuid)
                 await createSummoner(name, tag, platform)
             }
             await prisma.Participant.create({
@@ -379,7 +379,7 @@ export const getMatches = async (summonerName, tag, numOfMatches) => {
     if (isNaN(numOfMatches)) {
         throw new Error("Invalid numOfMatches given")
     }
-    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const puuid = await getSummonerPuuidFromNameTag(summonerName, tag)
     const participants = await prisma.participant.findMany({
         where: { puuid: puuid },
         select: {
@@ -402,8 +402,8 @@ export const getMatches = async (summonerName, tag, numOfMatches) => {
 }
 
 export const createMasteries = async (summonerName, tag) => {
-    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
-    const {platform} = await getPlatformFromPuuid(puuid)
+    const puuid = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const platform = await getPlatformFromPuuid(puuid)
     const masteryData = await fetchMasteryByPuuid(puuid, platform)
     // delete any existing masteries that are no longer in the user's top 5
     const currentChampionIds = masteryData.map(m => m.championId)
@@ -438,7 +438,7 @@ export const createMasteries = async (summonerName, tag) => {
 }
 
 export const getMasteries = async (summonerName, tag) => {
-    const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
+    const puuid = await getSummonerPuuidFromNameTag(summonerName, tag)
     const masteries = await prisma.SummonerMastery.findMany({
         where: {
             puuid: puuid
