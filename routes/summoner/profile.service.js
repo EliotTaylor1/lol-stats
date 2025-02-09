@@ -5,20 +5,16 @@ const prisma = new PrismaClient()
 
 export const createSummoner = async (summonerName, tag) => {
     const accountData = await fetchPuuidByNameTag(summonerName, tag)
-    const existingRecord = await prisma.summonerId.findUnique({
-        where: {
-            puuid: accountData.puuid
-        }
-    })
-    if (existingRecord) {
-        throw new Error(`${accountData.puuid} already exists in SummonerId table`)
-    }
-
     const summonerData = await fetchSummonerDataByPuuid(accountData.puuid)
     const rankData = await fetchRankBySummonerId(summonerData.id)
 
-    await prisma.summonerId.create({
-        data : {
+    await prisma.summonerId.upsert({
+        where: {puuid: accountData.puuid},
+        update: {
+            summoner_name: summonerName,
+            summoner_tag: tag
+        },
+        create: {
             puuid: accountData.puuid,
             summoner_id: summonerData.id,
             account_id: summonerData.accountId,
@@ -26,29 +22,59 @@ export const createSummoner = async (summonerName, tag) => {
             summoner_tag: tag
         }
     })
-    await prisma.summonerDetails.create({
-        data: {
+    await prisma.summonerDetails.upsert({
+        where: {puuid: accountData.puuid},
+        update: {
+            summoner_level: summonerData.summonerLevel,
+            summoner_profile_icon: summonerData.profileIconId
+        },
+        create: {
             puuid: accountData.puuid,
             summoner_level: summonerData.summonerLevel,
             summoner_profile_icon: summonerData.profileIconId
         }
     })
-        //check the summoner has at least 1 rank
-        if (rankData.length > 0) {
-            for (const rank of rankData) {
-                await prisma.summonerRank.create({
-                    data: {
-                        summoner_id: rank.summonerId,
-                        queue_type: rank.queueType,
-                        tier: rank.tier,
-                        rank: rank.rank,
-                        points: rank.leaguePoints,
-                        wins: rank.wins,
-                        losses: rank.losses
-                    }
-                })
+    // delete all rank records for an existing user if they no longer have any
+    if (rankData.length === 0) {
+        await prisma.SummonerRank.deleteMany({
+            where: { summoner_id: summonerData.id}
+        })
+    } else {
+        // find which queues an existing user still has ranks for and delete any they no longer have
+        const currentQueueTypes = rankData.map(rank => rank.queueType)
+        await prisma.summonerRank.deleteMany({
+            where: {
+                summoner_id: summonerData.id,
+                queue_type: { notIn: currentQueueTypes }
             }
-        }
+        })
+    }
+    for (const rank of rankData) {
+        await prisma.summonerRank.upsert({
+            where: {
+                summoner_id_queue_type: {
+                    summoner_id: summonerData.id,
+                    queue_type: rank.queueType
+                }
+            },
+            update: {
+                tier: rank.tier,
+                rank: rank.rank,
+                points: rank.leaguePoints,
+                wins: rank.wins,
+                losses: rank.losses
+            },
+            create: {
+                summoner_id: rank.summonerId,
+                queue_type: rank.queueType,
+                tier: rank.tier,
+                rank: rank.rank,
+                points: rank.leaguePoints,
+                wins: rank.wins,
+                losses: rank.losses
+            }
+        })
+    }
 }
 
 export const getSummoner = async (summonerName, tag) => {
@@ -369,10 +395,29 @@ export const getMatches = async (summonerName, tag, numOfMatches) => {
 export const createMasteries = async (summonerName, tag) => {
     const {puuid} = await getSummonerPuuidFromNameTag(summonerName, tag)
     const masteryData = await fetchMasteryByPuuid(puuid)
+    // delete any existing masteries that are no longer in the user's top 5
+    const currentChampionIds = masteryData.map(m => m.championId)
+    await prisma.SummonerMastery.deleteMany({
+        where: {
+            puuid,
+            champion_id: { notIn: currentChampionIds }
+        }
+    })
     for (const mastery of masteryData) {
-        await prisma.SummonerMastery.create({
-            data: {
-                puuid: puuid,
+        await prisma.SummonerMastery.upsert({
+            where: {
+                summoner_champion_unique: {
+                    puuid,
+                    champion_id: mastery.championId
+                }
+            },
+            update: {
+                champion_level: mastery.championLevel,
+                champion_points: mastery.championPoints,
+                last_play_time: mastery.lastPlayTime
+            },
+            create: {
+                puuid,
                 champion_id: mastery.championId,
                 champion_level: mastery.championLevel,
                 champion_points: mastery.championPoints,
