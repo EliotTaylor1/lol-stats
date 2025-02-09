@@ -7,7 +7,6 @@ BigInt.prototype.toJSON = function() { return this.toString() }
 const router = express.Router()
 
 router.get('/match/:match_id/summary', async (req, res) => {
-    console.log(`Got /matches/${req.params.match_id}/summary GET request`)
     try {
         const summary = await getMatchSummary(req.params.match_id)
         res.status(200)
@@ -22,7 +21,6 @@ router.get('/match/:match_id/summary', async (req, res) => {
 })
 
 router.get('/match/:match_id/details', async (req, res) => {
-    console.log(`Got /match/${req.params.match_id}/details GET request`)
     try {
         const details = await getMatchDetails(req.params.match_id)
         res.status(200)

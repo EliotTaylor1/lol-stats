@@ -4,7 +4,6 @@ import { createSummoner, getSummoner, getMatches, createMatches, getMasteries, c
 const router = express.Router()
 
 router.post('/createUser', async (req, res) => {
-    console.log("Got /createUser POST request")
     const {summonerName, tag, platform} = req.body
     try {
         await createSummoner(summonerName, tag, platform)
@@ -22,7 +21,6 @@ router.post('/createUser', async (req, res) => {
 })
 
 router.get('/profile/:summoner-:tag', async (req, res) => {
-    console.log(`Got /profile/${req.params.summoner}-${req.params.tag} GET request`)
     try {
         const summoner = await getSummoner(req.params.summoner, req.params.tag)
         res.status(200)
@@ -37,7 +35,6 @@ router.get('/profile/:summoner-:tag', async (req, res) => {
 })
 
 router.get('/profile/:summoner-:tag/mastery', async (req, res) => {
-    console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/mastery GET request`)
     try {
         const mastery = await getMasteries(req.params.summoner, req.params.tag)
         res.status(200)
@@ -52,7 +49,6 @@ router.get('/profile/:summoner-:tag/mastery', async (req, res) => {
 })
 
 router.post('/profile/:summoner-:tag/mastery', async (req, res) => {
-    console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/mastery POST request`)
     try {
         await createMasteries(req.params.summoner, req.params.tag)
         res.status(201)
@@ -69,7 +65,6 @@ router.post('/profile/:summoner-:tag/mastery', async (req, res) => {
 })
 
 router.get('/profile/:summoner-:tag/matches', async (req, res) => {
-    console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/matches GET request`)
     try {
         const matches = await getMatches(req.params.summoner, req.params.tag, req.query.numOfMatches || 10)
         res.status(200)
@@ -84,7 +79,6 @@ router.get('/profile/:summoner-:tag/matches', async (req, res) => {
 })
 
 router.post('/profile/:summoner-:tag/matches', async (req, res) => {
-    console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/matches POST request`)
     try {
         await createMatches(req.params.summoner, req.params.tag, req.query.numOfMatches || 10)
         res.status(201)
