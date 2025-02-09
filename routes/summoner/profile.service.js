@@ -87,12 +87,14 @@ export const getSummoner = async (summonerName, tag) => {
             details: {
                 select: {
                     summoner_level: true,
-                    summoner_profile_icon: true
+                    summoner_profile_icon: true,
                 }
             },
             ranks: {
                 omit: {
-                    summoner_id: true
+                    summoner_id: true,
+                    created_at: true,
+                    updated_at: true
                 }
             }
         }
@@ -434,8 +436,9 @@ export const getMasteries = async (summonerName, tag) => {
             puuid: puuid
         },
         omit: {
-            id: true,
-            puuid: true
+            puuid: true,
+            created_at: true,
+            updated_at: true
         }
     })
     return masteries

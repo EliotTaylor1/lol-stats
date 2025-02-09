@@ -9,14 +9,12 @@ export const getMatchSummary = async (match_id) => {
             start: true,
             duration: true,
             gamemode: true,
-
             participants: {
                 select: {
                     team_id: true,
                     win: true,
                     champion_id: true,
                     individual_position: true,
-
                     summoner: {
                         select: {
                             summoner_name: true,
@@ -63,6 +61,9 @@ export const getMatchSummary = async (match_id) => {
 export const getMatchDetails = async (match_id) => {
     const match = await prisma.match.findUnique({
         where: {match_id: match_id},
+        omit: {
+            created_at: true
+        },
         include: {
             participants: {
                 omit: {match_id: true},
