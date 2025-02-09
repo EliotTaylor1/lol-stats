@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 // region = europe / amercias / asia etc
 // platform = euw1 / na1 / kr etc
+// https://developer.riotgames.com/docs/lol#routing-values
 
 const prisma = new PrismaClient()
 
@@ -79,6 +80,9 @@ export const fetchMasteryByPuuid = async (puuid, platform) => {
     }
 
     const masteryData = await masteriesResponse.json()
+    for (let mastery of masteryData) {
+        mastery.lastPlayTime = new Date(mastery.lastPlayTime)
+    }
     return masteryData
 }
 
@@ -109,6 +113,8 @@ export const fetchMatchDetails = async (matchId, region) => {
     }
 
     const matchDetailsData = await matchDetailsResponse.json()
+    matchDetailsData.info.gameCreation = new Date(matchDetailsData.info.gameCreation)
+    matchDetailsData.info.gameEndTimestamp = new Date(matchDetailsData.info.gameEndTimestamp)
     return matchDetailsData
 }
 

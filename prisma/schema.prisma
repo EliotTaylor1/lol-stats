@@ -45,7 +45,7 @@ model SummonerMastery {
   champion_id     Int
   champion_level  Int
   champion_points Int
-  last_play_time  BigInt
+  last_play_time  DateTime
   created_at      DateTime   @default(now())
   updated_at      DateTime   @updatedAt
   summoner        SummonerId @relation(fields: [puuid], references: [puuid])
@@ -72,8 +72,8 @@ model SummonerRank {
 
 model Match {
   match_id     String        @id @unique
-  start        BigInt
-  end          BigInt
+  start        DateTime
+  end          DateTime
   duration     Int
   gamemode     String
   game_type    String

@@ -1,9 +1,6 @@
 import express from 'express'
 import { getMatchSummary, getMatchDetails } from './matches.service.js'
 
-// convert BigInts to strings so .json() works
-BigInt.prototype.toJSON = function() { return this.toString() }
-
 const router = express.Router()
 
 router.get('/match/:match_id/summary', async (req, res) => {

@@ -132,8 +132,8 @@ export const createMatches = async (summonerName, tag, numOfMatches) => {
         await prisma.Match.create({
             data : {
                 match_id: match,
-                start: BigInt(matchDetails.info.gameCreation),
-                end: BigInt(matchDetails.info.gameEndTimestamp),
+                start: matchDetails.info.gameCreation,
+                end: matchDetails.info.gameEndTimestamp,
                 duration: matchDetails.info.gameDuration,
                 gamemode: matchDetails.info.gameMode,
                 game_type: matchDetails.info.gameType,
