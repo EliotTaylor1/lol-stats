@@ -37,7 +37,7 @@ router.get('/profile/:summoner-:tag', async (req, res) => {
 })
 
 router.get('/profile/:summoner-:tag/mastery', async (req, res) => {
-    console.log(`Got /profile/${req.params.summoner}-:${req.params.tag}/mastery GET request`)
+    console.log(`Got /profile/${req.params.summoner}-${req.params.tag}/mastery GET request`)
     try {
         const mastery = await getMasteries(req.params.summoner, req.params.tag)
         res.status(200)
