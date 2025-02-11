@@ -1,5 +1,5 @@
 # LoL Stats
-LoL Stats is a dockerised backend app which uses the Riot Games API to serve and store stats for a League of Legends player.
+LoL Stats is a dockerised backend app which uses the Riot Games API to serve and store stats for a League of Legends player.  
 Stack: Node.js, Express, Morgan, Prisma, PostgreSQL  
 
 ---
