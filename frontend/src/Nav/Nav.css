@@ -1,0 +1,14 @@
+nav {
+    display: flex;
+}
+
+nav .navElement {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+nav .navElement.last {
+    margin-left: auto;
+}

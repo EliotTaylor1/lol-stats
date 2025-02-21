@@ -1,0 +1,87 @@
+.profile {
+    background: #0f0f0f;
+    min-height: 100vh;
+    color: white;
+    padding: 2rem;
+  }
+  
+  .header {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    background: #1a1a1a;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  
+  .summonerIcon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #3265b1;
+  }
+  
+  .summonerInfo {
+    flex: 1;
+  }
+  
+  .summonerName {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .summonerTag {
+    color: #666;
+    font-weight: normal;
+  }
+  
+  .level {
+    color: #888;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .refreshButton {
+    background: #3265b1;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .refreshButton:hover {
+    background: #2a5290;
+  }
+  
+  .ranks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .masterySection {
+    margin-bottom: 2rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3265b1;
+  }
+  
+  .masteryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .matchHistory {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
