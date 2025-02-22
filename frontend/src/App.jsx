@@ -1,8 +1,9 @@
-import { Routes, Route, Outlet } from "react-router"
+import { Routes, Route, Outlet } from "react-router-dom"
 import Nav from "./Nav/Nav.jsx"
 import Footer from "./Footer/Footer.jsx"
-import ProfileHeader from "./Profile/ProfileHeader.jsx"
+import Profile from "./Profile/Profile.jsx"
 import SearchForm from "./Search/SearchForm.jsx"
+import Match from "./Match/Match.jsx"
 
 function Layout() {
   return (
@@ -21,7 +22,8 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path='/' element={<SearchForm />} />
-          <Route path="/profile/:summonerName" element={<ProfileHeader />} />
+          <Route path="/profile/:platform/:name-:tag" element={<Profile />} />
+          <Route path="/match/:matchId/details" element={<Match />} />
         </Route>
       </Routes>
   )

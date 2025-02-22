@@ -3,19 +3,19 @@ import { useNavigate } from 'react-router-dom';
 
 import './SearchForm.css'
 
-const regions = ['EUW', 'EUNE', 'RU', 'TR', 'ME', 'NA',
-                'BR', 'LAS', 'LAN', 'KR', 'JP', 'SG',
-                'OCE', 'VN', 'TW',];
+const platforms = ['euw1', 'eun1', 'ru', 'tr', 'me1', 'na1',
+                'br1', 'la2', 'la1', 'kr', 'jp1', 'sg2',
+                'oc1', 'vn2', 'tw2',];
 
 export default function SearchForm() {
   const [name, setName] = useState('');
   const [tag, setTag] = useState('');
-  const [region, setRegion] = useState('EUW');
+  const [platform, setPlatform] = useState('euw1');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/profile/${name}-${tag}`);
+    navigate(`/profile/${platform}/${encodeURIComponent(name)}-${encodeURIComponent(tag)}`);
   };
 
   return (
@@ -38,11 +38,11 @@ export default function SearchForm() {
             className="tagInput"
           />
           <select 
-            value={region} 
-            onChange={(e) => setRegion(e.target.value)}
-            className="regionSelect"
+            value={platform} 
+            onChange={(e) => setPlatform(e.target.value)}
+            className="platformSelect"
           >
-            {regions.map(r => <option key={r} value={r}>{r}</option>)}
+            {platforms.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
         </div>
         <button type="submit" className="searchButton">Search</button>
