@@ -4,9 +4,9 @@ import { createSummoner, getSummoner, getMatches, createMatches, getMasteries, c
 const router = express.Router();
 
 router.post('/createUser', async (req, res) => {
-    const {summonerName, tag, platform} = req.body;
+    const {platform, summonerName, tag} = req.body;
     try {
-        await createSummoner(summonerName, tag, platform);
+        await createSummoner(platform, summonerName, tag);
         res.status(201);
         res.json({
             status: 'Summoner added'
@@ -20,9 +20,9 @@ router.post('/createUser', async (req, res) => {
     }
 });
 
-router.get('/profile/:summoner-:tag', async (req, res) => {
+router.get('/profile/:platform/:summoner-:tag', async (req, res) => {
     try {
-        const summoner = await getSummoner(req.params.summoner, req.params.tag);
+        const summoner = await getSummoner(req.params.platform, req.params.summoner, req.params.tag);
         res.status(200);
         res.json({summoner});
     } catch (e) {
@@ -34,9 +34,9 @@ router.get('/profile/:summoner-:tag', async (req, res) => {
     }
 });
 
-router.get('/profile/:summoner-:tag/mastery', async (req, res) => {
+router.get('/profile/:platform/:summoner-:tag/mastery', async (req, res) => {
     try {
-        const mastery = await getMasteries(req.params.summoner, req.params.tag);
+        const mastery = await getMasteries(req.params.platform, req.params.summoner, req.params.tag);
         res.status(200);
         res.json({mastery});
     } catch (e) {
@@ -48,9 +48,9 @@ router.get('/profile/:summoner-:tag/mastery', async (req, res) => {
     }
 });
 
-router.post('/profile/:summoner-:tag/mastery', async (req, res) => {
+router.post('/profile/:platform/:summoner-:tag/mastery', async (req, res) => {
     try {
-        await createMasteries(req.params.summoner, req.params.tag);
+        await createMasteries(req.params.platform, req.params.summoner, req.params.tag);
         res.status(201);
         res.json({
             status: 'Mastery created'
@@ -64,9 +64,9 @@ router.post('/profile/:summoner-:tag/mastery', async (req, res) => {
     }
 });
 
-router.get('/profile/:summoner-:tag/matches', async (req, res) => {
+router.get('/profile/:platform/:summoner-:tag/matches', async (req, res) => {
     try {
-        const matches = await getMatches(req.params.summoner, req.params.tag, req.query.numOfMatches || 10);
+        const matches = await getMatches(req.params.platform, req.params.summoner, req.params.tag, req.query.numOfMatches || 10);
         res.status(200);
         res.json(matches);
     } catch (e) {
@@ -78,9 +78,9 @@ router.get('/profile/:summoner-:tag/matches', async (req, res) => {
     }
 });
 
-router.post('/profile/:summoner-:tag/matches', async (req, res) => {
+router.post('/profile/:platform/:summoner-:tag/matches', async (req, res) => {
     try {
-        await createMatches(req.params.summoner, req.params.tag, req.query.numOfMatches || 10);
+        await createMatches(req.params.platform, req.params.summoner, req.params.tag, req.query.numOfMatches || 10);
         res.status(201);
         res.json({
             status: 'matches created'

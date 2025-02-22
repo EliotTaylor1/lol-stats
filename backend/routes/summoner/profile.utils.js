@@ -118,12 +118,13 @@ export const fetchMatchDetails = async (matchId, region) => {
     return matchDetailsData;
 };
 
-export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
-    const puuid = await prisma.summonerId.findUnique({
+export const getSummonerPuuidFromPlatformNameTag = async (platform, summonerName, tag) => {
+    const puuid = await prisma.summoner.findUnique({
         where: {
-            summoner_name_summoner_tag : {
+            summoner_name_summoner_tag_platform : {
                 summoner_name: summonerName,
-                summoner_tag: tag
+                summoner_tag: tag,
+                platform: platform
             }
         },
         select: {
@@ -132,7 +133,7 @@ export const getSummonerPuuidFromNameTag = async (summonerName, tag) => {
     });
 
     if (!puuid) {
-        throw new Error(`No Puuid in SummonerId table for ${summonerName}, ${tag}`)
+        throw new Error(`No Puuid in Summoner table for ${summonerName}, ${tag}`)
     }
     return puuid.puuid;
 };
@@ -164,7 +165,7 @@ export const getRegionFromPlatform = (platform) => {
 };
 
 export const getPlatformFromPuuid = async (puuid) => {
-    const platform = await prisma.summonerDetails.findUnique({
+    const platform = await prisma.summoner.findUnique({
         where: {
             puuid: puuid
         },
@@ -173,13 +174,13 @@ export const getPlatformFromPuuid = async (puuid) => {
         }
     });
     if (!platform) {
-        throw new Error(`Failed to get platform. ${puuid} does not exist in SummonerDetails`)
+        throw new Error(`Failed to get platform. ${puuid} does not exist in Summoner`)
     }
     return platform.platform;
 };
 
 export const getRegionFromPuuid = async (puuid) => {
-    const region = await prisma.summonerDetails.findUnique({
+    const region = await prisma.summoner.findUnique({
         where: {
             puuid: puuid
         },
@@ -188,7 +189,7 @@ export const getRegionFromPuuid = async (puuid) => {
         }
     });
     if (!region) {
-        throw new Error(`Failed to get region. ${puuid} does not exist in SummonerDetails`)
+        throw new Error(`Failed to get region. ${puuid} does not exist in Summoner`)
     }
     return region.region;
 };
