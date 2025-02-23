@@ -15,6 +15,7 @@ export default function SearchForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // so the url looks like /:platform/:name-:tag instead of /:platform/:name/:tag
     const nameTag = encodeURIComponent(`${name}-${tag}`)
     navigate(`/profile/${platform}/${(nameTag)}`);
   };
