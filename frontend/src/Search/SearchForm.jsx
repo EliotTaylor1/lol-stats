@@ -15,7 +15,8 @@ export default function SearchForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/profile/${platform}/${encodeURIComponent(name)}-${encodeURIComponent(tag)}`);
+    const nameTag = encodeURIComponent(`${name}-${tag}`)
+    navigate(`/profile/${platform}/${(nameTag)}`);
   };
 
   return (

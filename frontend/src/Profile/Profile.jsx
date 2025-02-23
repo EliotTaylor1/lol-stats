@@ -3,19 +3,22 @@ import { useParams } from 'react-router-dom';
 import ProfileHeader from './ProfileHeader';
 
 export default function Profile() {
-  const { platform, name, tag } = useParams();
-  const decodedName = decodeURI(name);
-  const decodedTag = decodeURI(tag);
+  const { platform, nameTag } = useParams();
+  const [ name, tag ] = splitNameTag(nameTag)
   const [summonerData, setSummonerData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log("Params:", platform, decodedName, decodedTag);
+  function splitNameTag(nameTag) {
+    const decodedNameTag = decodeURI(nameTag)
+    const split = decodedNameTag.split('-')
+    return split
+  }
 
   useEffect(() => {
     const fetchSummonerData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/profile/${platform}/${decodedName}-${decodedTag}`);
+        const response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}`);
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setSummonerData(data);
@@ -27,7 +30,7 @@ export default function Profile() {
     };
 
     fetchSummonerData();
-  }, [platform, decodedName, decodedTag]);
+  }, [platform, name, tag]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -35,8 +38,8 @@ export default function Profile() {
   return (
     <div>
       <ProfileHeader 
-        name={decodedName}
-        tag={decodedTag}
+        name={name}
+        tag={tag}
         platform={platform}
         data={summonerData}
       />

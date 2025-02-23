@@ -22,7 +22,7 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path='/' element={<SearchForm />} />
-          <Route path="/profile/:platform/:name-:tag" element={<Profile />} />
+          <Route path="/profile/:platform/:nameTag" element={<Profile />} />
           <Route path="/match/:matchId/details" element={<Match />} />
         </Route>
       </Routes>
