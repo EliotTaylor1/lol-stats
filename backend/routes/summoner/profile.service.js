@@ -125,6 +125,7 @@ export const createMatches = async (platform, summonerName, tag, numOfMatches) =
                 duration: matchDetails.info.gameDuration,
                 gamemode: matchDetails.info.gameMode,
                 game_type: matchDetails.info.gameType,
+                queue_id: matchDetails.info.queueId,
                 game_version: matchDetails.info.gameVersion
             }
         });

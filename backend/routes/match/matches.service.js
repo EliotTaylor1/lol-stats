@@ -9,6 +9,7 @@ export const getMatchSummary = async (match_id) => {
             start: true,
             duration: true,
             gamemode: true,
+            queue_id: true,
             participants: {
                 select: {
                     team_id: true,
