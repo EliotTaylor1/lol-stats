@@ -1,0 +1,9 @@
+.participant-card {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    width: 150px;
+  }
+  

@@ -3,7 +3,7 @@ import Nav from "./Nav/Nav.jsx"
 import Footer from "./Footer/Footer.jsx"
 import Profile from "./Profile/Profile.jsx"
 import SearchForm from "./Search/SearchForm.jsx"
-import Match from "./Match/Match.jsx"
+import MatchDetails from "./Match/MatchDetails.jsx"
 
 function Layout() {
   return (
@@ -23,7 +23,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path='/' element={<SearchForm />} />
           <Route path="/profile/:platform/:nameTag" element={<Profile />} />
-          <Route path="/match/:matchId/details" element={<Match />} />
+          <Route path="/match/:matchId/details" element={<MatchDetails />} />
         </Route>
       </Routes>
   )
