@@ -152,7 +152,7 @@ export const createMatches = async (platform, summonerName, tag, numOfMatches) =
                     time_played: participant.timePlayed,
                     lane: participant.lane,
                     role: participant.role,
-                    individual_position: participant.individualPosition
+                    team_position: participant.teamPosition
                 }
             });
             await prisma.ParticipantPerformance.create({

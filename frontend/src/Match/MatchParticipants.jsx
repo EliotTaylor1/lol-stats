@@ -3,7 +3,7 @@ import './MatchParticipant.css'
 export function MatchParticipant({ participant }) {
     return (
         <div className="participant-card">
-            <p>{participant.individual_position}</p>
+            <p>{participant.team_position}</p>
             <p>{participant.summoner.summoner_name} #{participant.summoner.summoner_tag}</p>
             <p>{participant.champion_id}</p>
             <p>{participant.performance.champion_level}</p>

@@ -84,7 +84,7 @@ model Participant {
   time_played         Int
   lane                String
   role                String
-  individual_position String
+  team_position       String
   performance         ParticipantPerformance?
   build               ParticipantBuild?
   pings               ParticipantPings?
