@@ -149,6 +149,7 @@ export const createMatches = async (platform, summonerName, tag, numOfMatches) =
                     team_id: participant.teamId,
                     win: participant.win,
                     champion_id: participant.championId,
+                    champion_name: participant.championName,
                     time_played: participant.timePlayed,
                     lane: participant.lane,
                     role: participant.role,

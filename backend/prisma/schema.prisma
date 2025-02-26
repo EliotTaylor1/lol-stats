@@ -81,6 +81,7 @@ model Participant {
   team_id             Int
   win                 Boolean
   champion_id         Int
+  champion_name       String
   time_played         Int
   lane                String
   role                String
