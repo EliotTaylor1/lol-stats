@@ -1,6 +1,10 @@
 import './Profile.css'
 import { useState} from "react";
 
+function getProfileIcon(profileIconId) {
+    return `https://ddragon.leagueoflegends.com/cdn/15.4.1/img/profileicon/${profileIconId}.png`
+}
+
 export default function ProfileHeader({ name, tag, platform, data }) {
     const [refreshedData, setRefreshedData] = useState(data);
 
@@ -36,6 +40,7 @@ export default function ProfileHeader({ name, tag, platform, data }) {
     return (
         <div className="header-container">
             <div className="summoner-details">
+                <img src={getProfileIcon((refreshedData.summoner_profile_icon))}/>
                 <div className="summoner-name-tag">{name} #{tag}</div>
                 <div className="summoner-level">Level: {refreshedData.summoner_level}</div>
                 <div className="platform">{platform} / {refreshedData.region}</div>
