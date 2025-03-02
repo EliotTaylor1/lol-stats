@@ -13,8 +13,20 @@ export default function SearchForm() {
   const [platform, setPlatform] = useState('euw1');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = {
+      summonerName: name,
+      tag: tag,
+      platform: platform,
+    }
+    await fetch('http://localhost:3000/api/createUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
     // so the url looks like /:platform/:name-:tag instead of /:platform/:name/:tag
     const nameTag = encodeURIComponent(`${name}-${tag}`)
     navigate(`/profile/${platform}/${(nameTag)}`);
@@ -47,7 +59,7 @@ export default function SearchForm() {
             {platforms.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
         </div>
-        <button type="submit" className="searchButton">Search</button>
+        <button type="submit" className="searchButton">View Summoner</button>
       </div>
     </form>
   );
