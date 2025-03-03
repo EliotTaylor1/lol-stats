@@ -1,37 +1,38 @@
 import './MatchParticipant.css'
+const PATCH = import.meta.env.VITE_PATCH;
 
 function getItemImageString(itemId) {
-    return `https://ddragon.leagueoflegends.com/cdn/15.4.1/img/item/${itemId}.png`
+    return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/item/${itemId}.png`
 } 
 
 function getChampionPortrait(championName) {
-    return `https://ddragon.leagueoflegends.com/cdn/15.4.1/img/champion/${championName}.png`
+    return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/champion/${championName}.png`
 }
 
 function getSummonerSpellImageFromId(summonerSpellId) {
     switch (summonerSpellId) {
         case 1:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerCleanse.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerCleanse.png`
         case 3:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerExhaust.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerExhaust.png`
         case 4:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerFlash.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerFlash.png`
         case 6:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerHaste.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerHaste.png`
         case 7:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerHeal.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerHeal.png`
         case 11:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerSmite.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerSmite.png`
         case 12:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerTeleport.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerTeleport.png`
         case 13:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerMana.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerMana.png`
         case 14:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerDot.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerDot.png`
         case 21:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerBarrier.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerBarrier.png`
         case 32:
-            return "https://ddragon.leagueoflegends.com/cdn/15.4.1/img/spell/SummonerSnowball.png"
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerSnowball.png`
     }
 }
 

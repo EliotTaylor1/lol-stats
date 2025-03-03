@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MatchParticipant } from './MatchParticipants';
+import { MatchParticipant } from './MatchParticipant.jsx';
 import { MatchOverview } from './MatchOverview';
 import { MatchStats } from './MatchStats';
 
