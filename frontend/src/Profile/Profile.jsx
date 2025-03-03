@@ -11,6 +11,7 @@ export default function Profile() {
     summonerData,
     summonerRankData,
     summonerMasteryData,
+      summonerMatchData,
     refreshSummonerData,
       loading,
       error
@@ -19,8 +20,7 @@ export default function Profile() {
   //split out the nameTag we created from the SearchForm.
   function splitNameTag(nameTag) {
     const decodedNameTag = decodeURI(nameTag)
-    const split = decodedNameTag.split('-') //This is fine as names can't contain a '-' so we won't incorrectly split
-    return split
+    return decodedNameTag.split('-') //This is fine as names can't contain a '-' so we won't incorrectly split
   }
 
   if (loading) return <div>Loading...</div>;
@@ -37,6 +37,11 @@ export default function Profile() {
       />
       <ProfileRank data={summonerRankData} />
       <ProfileMastery data={summonerMasteryData} />
+      <ol>
+        {summonerMatchData.map(match =>
+        <li key={match}>{match}</li>
+      )}
+      </ol>
     </div>
   );
 }

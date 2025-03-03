@@ -4,6 +4,7 @@ export default function useSummonerData(platform, name, tag) {
     const [summonerData, setSummonerData] = useState(null);
     const [summonerRankData, setSummonerRankData] = useState(null);
     const [summonerMasteryData, setSummonerMasteryData] = useState(null);
+    const [summonerMatchData, setSummonerMatchData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -19,9 +20,14 @@ export default function useSummonerData(platform, name, tag) {
             if (!masteryResponse.ok) throw new Error('Failed to fetch Mastery Data');
             const masteryData = await masteryResponse.json();
 
+            const matchResponse = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/matches?numOfMatches=10`);
+            if (!matchResponse.ok) throw new Error('Failed to fetch Match Data');
+            const matchData = await matchResponse.json();
+
             setSummonerData(summonerData.summoner);
             setSummonerRankData(summonerData.summoner.ranks);
             setSummonerMasteryData(masteryData.mastery);
+            setSummonerMatchData(matchData);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -45,6 +51,10 @@ export default function useSummonerData(platform, name, tag) {
                 method: 'POST',
             });
 
+            await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/matches?numOfMatches=3`, {
+                method: 'POST',
+            })
+
             // Re-fetch the updated data
             await fetchSummonerData();
         } catch (error) {
@@ -56,5 +66,5 @@ export default function useSummonerData(platform, name, tag) {
         fetchSummonerData();
     }, [platform, name, tag]);
 
-    return { summonerData, summonerRankData, summonerMasteryData, loading, error, refreshSummonerData };
+    return { summonerData, summonerRankData, summonerMasteryData, summonerMatchData, loading, error, refreshSummonerData };
 }
