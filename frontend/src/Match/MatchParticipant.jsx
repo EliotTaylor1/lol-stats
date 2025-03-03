@@ -12,7 +12,7 @@ function getChampionPortrait(championName) {
 function getSummonerSpellImageFromId(summonerSpellId) {
     switch (summonerSpellId) {
         case 1:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerCleanse.png`
+            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerBoost.png`
         case 3:
             return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerExhaust.png`
         case 4:
