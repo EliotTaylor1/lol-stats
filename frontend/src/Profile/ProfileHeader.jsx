@@ -2,7 +2,6 @@ import './Profile.css'
 const PATCH = import.meta.env.VITE_PATCH;
 
 function getProfileIcon(profileIconId) {
-    console.log(PATCH)
     return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/profileicon/${profileIconId}.png`
 }
 
