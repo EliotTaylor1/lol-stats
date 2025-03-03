@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import ProfileHeader from './ProfileHeader';
 import ProfileRank from './ProfileRank'
 import ProfileMastery from './ProfileMastery'
@@ -39,7 +39,9 @@ export default function Profile() {
       <ProfileMastery data={summonerMasteryData} />
       <ol>
         {summonerMatchData.map(match =>
-        <li key={match}>{match}</li>
+        <li key={match}>
+            <Link to={`/match/${match}/details`}>{match}</Link>
+        </li>
       )}
       </ol>
     </div>
