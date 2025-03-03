@@ -41,6 +41,10 @@ export default function useSummonerData(platform, name, tag) {
             });
             if (!updateProfileRes.ok) throw new Error('Failed to refresh Summoner Data');
 
+            await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/mastery`, {
+                method: 'POST',
+            });
+
             // Re-fetch the updated data
             await fetchSummonerData();
         } catch (error) {
