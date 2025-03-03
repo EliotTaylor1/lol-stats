@@ -27,6 +27,9 @@ export default function SearchForm() {
       },
       body: JSON.stringify(formData),
     })
+    await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/mastery`, {
+      method: 'POST',
+    })
     // so the url looks like /:platform/:name-:tag instead of /:platform/:name/:tag
     const nameTag = encodeURIComponent(`${name}-${tag}`)
     navigate(`/profile/${platform}/${(nameTag)}`);
