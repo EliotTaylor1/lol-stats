@@ -2,6 +2,18 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
 
+export const getMatches = async () => {
+    const matches = await prisma.match.findMany({
+        orderBy: {
+            start: 'desc'
+        }
+    })
+    if (!matches) {
+        throw new Error('No matches found')
+    }
+    return matches
+}
+
 export const getMatchSummary = async (match_id) => {
     const match = await prisma.match.findUnique({
         where: {match_id: match_id},
@@ -16,6 +28,7 @@ export const getMatchSummary = async (match_id) => {
                     win: true,
                     champion_id: true,
                     team_position: true,
+                    puuid: true,
                     summoner: {
                         select: {
                             summoner_name: true,
