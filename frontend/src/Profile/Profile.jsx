@@ -1,11 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
+import {useState} from "react";
+import useSummonerData from './hooks/useSummonerData';
 import ProfileHeader from './ProfileHeader';
 import ProfileRank from './ProfileRank'
 import ProfileMastery from './ProfileMastery'
-import useSummonerData from './hooks/useSummonerData';
 
 export default function Profile() {
   const { platform, nameTag } = useParams();
+    const [activeTab, setActiveTab] = useState('rank');
   const [ name, tag ] = splitNameTag(nameTag)
   const {
     summonerData,
@@ -35,15 +37,41 @@ export default function Profile() {
         data={summonerData}
         refreshSummonerData={refreshSummonerData}
       />
-      <ProfileRank data={summonerRankData} />
-      <ProfileMastery data={summonerMasteryData} />
-      <ol>
-        {summonerMatchData.map(match =>
-        <li key={match}>
-            <Link to={`/match/${match}/details`}>{match}</Link>
-        </li>
-      )}
-      </ol>
+
+        <div className="tabs">
+            <button
+                className={activeTab === 'rank' ? 'active' : ''}
+                onClick={() => setActiveTab('rank')}
+            >
+                Rank
+            </button>
+            <button
+                className={activeTab === 'mastery' ? 'active' : ''}
+                onClick={() => setActiveTab('mastery')}
+            >
+                Mastery
+            </button>
+            <button
+                className={activeTab === 'matches' ? 'active' : ''}
+                onClick={() => setActiveTab('matches')}
+            >
+                Matches
+            </button>
+        </div>
+
+        <div className="tab-content">
+            {activeTab === 'rank' && <ProfileRank data={summonerRankData} />}
+            {activeTab === 'mastery' && <ProfileMastery data={summonerMasteryData} />}
+            {activeTab === 'matches' && (
+                <ol>
+                    {summonerMatchData.map((match) => (
+                        <li key={match}>
+                            <Link to={`/match/${match}/details`}>{match}</Link>
+                        </li>
+                    ))}
+                </ol>
+            )}
+        </div>
     </div>
   );
 }
