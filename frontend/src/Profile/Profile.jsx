@@ -45,6 +45,23 @@ export default function Profile() {
         }
     };
 
+    const fetchMatches = async () => {
+        try {
+            setLoading(true);
+            await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/matches?numOfMatches=3`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/matches?numOfMatches=10`);
+            const data = await response.json();
+            setSummonerMatchData(data);
+        } catch (err) {
+            setError('Failed to fetch matches.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchProfileHeader();
     }, [platform, name, tag]);
@@ -65,9 +82,7 @@ export default function Profile() {
                 data = await response.json();
                 setSummonerMasteryData(data.mastery);
             } else if (tab === 'matches') {
-                response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/matches?numOfMatches=10`);
-                data = await response.json();
-                setSummonerMatchData(data);
+                await fetchMatches();
             }
             setActiveTab(tab);
         } catch (err) {
@@ -84,6 +99,7 @@ export default function Profile() {
         setSummonerMatchData(null);
         setActiveTab(null);
         await fetchProfileHeader();
+        await fetchMatches();
     };
 
     if (loading) return <div>Loading...</div>;
