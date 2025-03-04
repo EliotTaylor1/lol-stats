@@ -20,7 +20,7 @@ export default function Profile() {
         return decodedNameTag.split('-') //This is fine as names can't contain a '-' so we won't incorrectly split
     }
 
-    // Fetch header data on mount
+    // Fetch header data on load
     const fetchProfileHeader = async () => {
         try {
             setLoading(true);
@@ -63,13 +63,12 @@ export default function Profile() {
             if (tab === 'mastery') {
                 response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/mastery`);
                 data = await response.json();
-                setSummonerMasteryData(data.mastery || []);
+                setSummonerMasteryData(data.mastery);
             } else if (tab === 'matches') {
                 response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/matches?numOfMatches=10`);
                 data = await response.json();
-                setSummonerMatchData(Array.isArray(data) ? data : []);
+                setSummonerMatchData(data);
             }
-
             setActiveTab(tab);
         } catch (err) {
             setError(`Failed to fetch ${tab} data.`);
@@ -79,7 +78,6 @@ export default function Profile() {
     };
 
 
-    // Refresh button now resets everything
     const refreshSummonerData = async () => {
         setSummonerData(null);
         setSummonerMasteryData(null);
@@ -94,7 +92,6 @@ export default function Profile() {
 
     return (
         <div>
-            {/* Profile Header loads immediately */}
             {summonerData && (
                 <ProfileHeader
                     name={name}
@@ -105,11 +102,10 @@ export default function Profile() {
                 />
             )}
 
-            {/* Tab Navigation */}
             <div className="tabs">
                 <button
                     className={activeTab === 'rank' ? 'active' : ''}
-                    onClick={() => setActiveTab('rank')} // Fix: No fetch needed
+                    onClick={() => setActiveTab('rank')}
                 >
                     Rank
                 </button>
@@ -127,7 +123,6 @@ export default function Profile() {
                 </button>
             </div>
 
-            {/* Tab Content */}
             <div className="tab-content">
                 {activeTab === 'rank' && summonerData?.ranks && <ProfileRank data={summonerData.ranks} />}
                 {activeTab === 'mastery' && summonerMasteryData && <ProfileMastery data={summonerMasteryData} />}
