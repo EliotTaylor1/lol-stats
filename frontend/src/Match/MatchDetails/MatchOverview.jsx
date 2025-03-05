@@ -1,4 +1,4 @@
-import { convertQueueIdToQueueName } from './match.utils.js'
+import { convertQueueIdToQueueName } from '../match.utils.js'
 import './MatchOverview.css'
 
 export function MatchOverview({ matchData }) {

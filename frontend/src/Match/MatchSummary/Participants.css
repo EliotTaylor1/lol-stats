@@ -1,0 +1,5 @@
+.participants-container {
+    justify-self: flex-end;
+    display: flex;
+    gap: 3rem;
+}

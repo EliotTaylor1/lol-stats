@@ -27,6 +27,7 @@ export const getMatchSummary = async (match_id) => {
                     team_id: true,
                     win: true,
                     champion_id: true,
+                    champion_name: true,
                     team_position: true,
                     puuid: true,
                     summoner: {

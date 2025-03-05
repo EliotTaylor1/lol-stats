@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import './SearchForm.css'
+import './ProfileSearchForm.css'
 
 const platforms = ['euw1', 'eun1', 'ru', 'tr', 'me1', 'na1',
                 'br1', 'la2', 'la1', 'kr', 'jp1', 'sg2',
                 'oc1', 'vn2', 'tw2',];
 
-export default function SearchForm() {
+export default function ProfileSearchForm() {
   const [name, setName] = useState('');
   const [tag, setTag] = useState('');
   const [platform, setPlatform] = useState('euw1');

@@ -14,7 +14,7 @@ export default function Profile() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    //split out the nameTag we created from the SearchForm.
+    //split out the nameTag we created from the ProfileSearchForm.
     function splitNameTag(nameTag) {
         const decodedNameTag = decodeURI(nameTag)
         return decodedNameTag.split('-') //This is fine as names can't contain a '-' so we won't incorrectly split

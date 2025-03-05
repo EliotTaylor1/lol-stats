@@ -1,5 +1,6 @@
-import MatchSearchForm from './MatchSearchForm.jsx'
-import MatchSummaryCard from "./MatchSummaryCard.jsx";
+import MatchSearchForm from '../Search/MatchSearchForm.jsx'
+import MatchSummaryCard from "./MatchSummary/MatchSummaryCard.jsx";
+import './MatchSearch.css'
 import {useEffect, useState} from "react";
 
 export default function MatchSearch() {
@@ -28,13 +29,15 @@ export default function MatchSearch() {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <>
+        <div className="match-search">
             <MatchSearchForm/>
-            <ul>
-                {matchData.map(match => (
-                    <MatchSummaryCard key={match.match_id} matchData={match}/>
-                ))}
-            </ul>
-        </>
+            <div className="match-card-container">
+                <ul>
+                    {matchData.map(match => (
+                        <MatchSummaryCard key={match.match_id} matchData={match}/>
+                    ))}
+                </ul>
+            </div>
+        </div>
     )
 }

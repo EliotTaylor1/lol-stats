@@ -1,40 +1,5 @@
 import './MatchParticipant.css'
-const PATCH = import.meta.env.VITE_PATCH;
-
-function getItemImageString(itemId) {
-    return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/item/${itemId}.png`
-} 
-
-function getChampionPortrait(championName) {
-    return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/champion/${championName}.png`
-}
-
-function getSummonerSpellImageFromId(summonerSpellId) {
-    switch (summonerSpellId) {
-        case 1:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerBoost.png`
-        case 3:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerExhaust.png`
-        case 4:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerFlash.png`
-        case 6:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerHaste.png`
-        case 7:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerHeal.png`
-        case 11:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerSmite.png`
-        case 12:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerTeleport.png`
-        case 13:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerMana.png`
-        case 14:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerDot.png`
-        case 21:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerBarrier.png`
-        case 32:
-            return `https://ddragon.leagueoflegends.com/cdn/${PATCH}/img/spell/SummonerSnowball.png`
-    }
-}
+import {getChampionPortrait, getItemImageString, getSummonerSpellImageFromId} from "../match.utils.js";
 
 export function MatchParticipant({ participant }) {
     // the build object contains more than just the 6 items a player builds
