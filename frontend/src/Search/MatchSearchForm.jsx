@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import './MatchSearchForm.css'
 
 export default function MatchSearchForm() {
     const [matchId, setMatchId] = useState();
@@ -11,7 +12,7 @@ export default function MatchSearchForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="match-search-form">
             <input
                 type="text"
                 placeholder="Match ID"

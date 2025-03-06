@@ -29,14 +29,13 @@ export default function MatchSearch() {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="match-search">
-            <MatchSearchForm/>
+        <div className="match-search-container">
+                <MatchSearchForm/>
+            <p className="recent-matches">Recent matches:</p>
             <div className="match-card-container">
-                <ul>
                     {matchData.map(match => (
                         <MatchSummaryCard key={match.match_id} matchData={match}/>
                     ))}
-                </ul>
             </div>
         </div>
     )
