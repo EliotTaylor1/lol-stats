@@ -1,4 +1,8 @@
-
+.participant-champion {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
 
 .participant-champion img {
     width: 24px;
