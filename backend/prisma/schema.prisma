@@ -76,23 +76,23 @@ model Match {
 }
 
 model Participant {
-  match_id            String
-  puuid               String
-  team_id             Int
-  win                 Boolean
-  champion_id         Int
-  champion_name       String
-  time_played         Int
-  lane                String
-  role                String
-  team_position       String
-  performance         ParticipantPerformance?
-  build               ParticipantBuild?
-  pings               ParticipantPings?
-  casts               ParticipantCasts?
-  challenges          ParticipantChallenges?
-  match               Match                   @relation(fields: [match_id], references: [match_id])
-  summoner            Summoner                @relation(fields: [puuid], references: [puuid])
+  match_id      String
+  puuid         String
+  team_id       Int
+  win           Boolean
+  champion_id   Int
+  champion_name String
+  time_played   Int
+  lane          String
+  role          String
+  team_position String
+  performance   ParticipantPerformance?
+  build         ParticipantBuild?
+  pings         ParticipantPings?
+  casts         ParticipantCasts?
+  challenges    ParticipantChallenges?
+  match         Match                   @relation(fields: [match_id], references: [match_id])
+  summoner      Summoner                @relation(fields: [puuid], references: [puuid])
 
   @@id([match_id, puuid])
 }
@@ -305,4 +305,12 @@ model ParticipantChallenges {
   wards_guarded                                    Int?
 
   @@id([match_id, puuid])
+}
+
+model Champions {
+  champion_id  String
+  champion_key Int
+
+  @@id([champion_id, champion_key])
+  @@unique([champion_id, champion_key])
 }
