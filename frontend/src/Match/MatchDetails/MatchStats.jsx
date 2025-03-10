@@ -66,7 +66,7 @@ export function MatchStats({ participants }) {
         const selectedOption = options[option];
 
         const data = participants.map(participant => ({
-            name: `${participant.summoner.summoner_name} #${participant.summoner.summoner_tag}`,
+            name: `${participant.summoner.summoner_name}`,
             value: getNestedValue(participant, selectedOption)
         }));
 
@@ -80,7 +80,7 @@ export function MatchStats({ participants }) {
                     <option key={opt} value={opt}>{opt}</option>
                 ))}
             </select>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
