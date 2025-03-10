@@ -69,7 +69,6 @@ export function MatchStats({ participants }) {
             name: `${participant.summoner.summoner_name}`,
             value: getNestedValue(participant, selectedOption),
             team: participant.team_id,
-            position: participant.position_id,
             fill: participant.team_id === 100 ? '#3498db' : '#e74c3c'
         }));
 
