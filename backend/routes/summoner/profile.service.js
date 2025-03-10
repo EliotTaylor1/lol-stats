@@ -1,5 +1,18 @@
 import { PrismaClient } from '@prisma/client'
-import { fetchMasteryByPuuid, fetchMatchDetails, fetchMatchesByPuuid, fetchNameTagByPuuid, fetchPuuidByNameTag, fetchRankBySummonerId, fetchSummonerDataByPuuid, getPlatformFromPuuid, getRegionFromPuuid, getRegionFromPlatform, getSummonerPuuidFromPlatformNameTag } from './profile.utils.js'
+import {
+    fetchMasteryByPuuid,
+    fetchMatchDetails,
+    fetchMatchesByPuuid,
+    fetchNameTagByPuuid,
+    fetchPuuidByNameTag,
+    fetchRankBySummonerId,
+    fetchSummonerDataByPuuid,
+    getPlatformFromPuuid,
+    getRegionFromPuuid,
+    getRegionFromPlatform,
+    getSummonerPuuidFromPlatformNameTag,
+    getChampionIdFromKey
+} from './profile.utils.js'
 
 const prisma = new PrismaClient();
 
@@ -438,5 +451,10 @@ export const getMasteries = async (platform, summonerName, tag) => {
             updated_at: true
         }
     });
+    for (const mastery of masteries) {
+        const championName = await getChampionIdFromKey(mastery.champion_id)
+        mastery.champion_name = championName
+    }
+
     return masteries;
 };

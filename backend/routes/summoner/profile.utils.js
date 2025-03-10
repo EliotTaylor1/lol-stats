@@ -193,3 +193,14 @@ export const getRegionFromPuuid = async (puuid) => {
     }
     return region.region;
 };
+
+export const getChampionIdFromKey = async (championKey) => {
+    const champion = await prisma.champions.findFirst({
+        where: { champion_key: championKey },
+        select: { champion_id: true}
+    })
+    if (!champion) {
+        throw new Error(`Failed to get champion ID. ${championKey} does not exist in Champions`)
+    }
+    return champion.champion_id
+}

@@ -17,8 +17,8 @@ async function fetchLatestChampions(patch){
     const championArray = [] // create an Array instead of a map so we can insert easier via prisma in next func
     Object.values(champions.data).forEach(champion => {
         const data = {
-            champion_id: champion.id,
-            champion_key: Number(champion.key),
+            id: champion.id,
+            key: Number(champion.key),
         }
         championArray.push(data)
     });
@@ -26,9 +26,22 @@ async function fetchLatestChampions(patch){
 }
 async function populateChampionsTable(champions) {
     const prisma = new PrismaClient()
-    await prisma.champions.createMany({
-        data: champions
-    })
+    for (const champion of champions) {
+        await prisma.champions.upsert({
+            where: {
+                champion_id_champion_key: {
+                    champion_id: champion.id,
+                    champion_key: champion.key,
+                }},
+            update: {
+                champion_key: champion.key
+            },
+            create: {
+                champion_id: champion.id,
+                champion_key: champion.key
+            }
+        })
+    }
 }
 export const PATCH = await fetchLatestPatch()
 const CHAMPIONS_DATA = await fetchLatestChampions(PATCH)
