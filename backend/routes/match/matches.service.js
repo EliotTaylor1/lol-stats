@@ -1,3 +1,4 @@
+import {assignPositionId} from "./match.utils.js";
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
@@ -69,7 +70,15 @@ export const getMatchSummary = async (match_id) => {
     });
     if (!match) {
         throw new Error(`${match_id} does not exist in Match table`)
-    };
+    }
+    // assigns an ID based on the position the pariticpant played so we can order them in front end
+    for (const participant of match.participants) {
+        if (participant.team_position === "") { //some modes have no positions and therefore set pos to: ""
+            continue;
+        }
+        const positionId = assignPositionId(participant.team_position)
+        participant.position_id = positionId
+    }
     return match;
 };
 
@@ -125,6 +134,14 @@ export const getMatchDetails = async (match_id) => {
     });
     if (!match) {
         throw new Error(`${match_id} does not exist in Match table`)
-    };
+    }
+    // assigns an ID based on the position the pariticpant played so we can order them in front end
+    for (const participant of match.participants) {
+        if (participant.team_position === "") { //some modes have no positions and therefore set pos to: ""
+            continue;
+        }
+        const positionId = assignPositionId(participant.team_position)
+        participant.position_id = positionId
+    }
     return match;
 };

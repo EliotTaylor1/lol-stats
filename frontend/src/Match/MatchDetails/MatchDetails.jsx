@@ -33,7 +33,9 @@ export default function MatchDetails() {
   if (error) return <div>Error: {error}</div>;
 
   const blueTeam = matchData.participants.filter((p) => p.team_id === 100)
+  blueTeam.sort((a, b) => a.position_id - b.position_id)
   const redTeam = matchData.participants.filter((p) => p.team_id === 200)
+  redTeam.sort((a, b) => a.position_id - b.position_id)
 
   return (
     <div>
