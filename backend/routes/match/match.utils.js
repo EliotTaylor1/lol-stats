@@ -14,3 +14,18 @@ export function assignPositionId(position) {
             throw new Error(`Unrecognized position ${position}`)
     }
 }
+
+export function setWinningTeam(match) {
+        const firstParticipant = match.participants[0]
+        if (firstParticipant.win === true && firstParticipant.team_id === 100) {
+            return "Blue"
+        } else if (firstParticipant.win === false && firstParticipant.team_id === 100) {
+            return "Red"
+        } else if (firstParticipant.win === true && firstParticipant.team_id === 200) {
+            return "Red"
+        } else if (firstParticipant.win === false && firstParticipant.team_id === 200) {
+            return "Blue"
+        } else {
+            throw new Error("No winner")
+        }
+}

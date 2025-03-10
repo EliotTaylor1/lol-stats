@@ -1,4 +1,4 @@
-import {assignPositionId} from "./match.utils.js";
+import {assignPositionId, setWinningTeam} from "./match.utils.js";
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
@@ -134,6 +134,9 @@ export const getMatchDetails = async (match_id) => {
     });
     if (!match) {
         throw new Error(`${match_id} does not exist in Match table`)
+    }
+    if (match.queue_id !== 1700) { //1700 is arena with no team colours
+        match.winning_team = setWinningTeam(match)
     }
     // assigns an ID based on the position the pariticpant played so we can order them in front end
     for (const participant of match.participants) {
