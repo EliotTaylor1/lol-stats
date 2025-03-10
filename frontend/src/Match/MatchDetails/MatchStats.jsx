@@ -67,10 +67,14 @@ export function MatchStats({ participants }) {
 
         const data = participants.map(participant => ({
             name: `${participant.summoner.summoner_name}`,
-            value: getNestedValue(participant, selectedOption)
+            value: getNestedValue(participant, selectedOption),
+            team: participant.team_id,
+            position: participant.position_id,
+            fill: participant.team_id === 100 ? '#3498db' : '#e74c3c'
         }));
 
         setChartData(data);
+        console.log(data)
     }, [option, participants]);
 
     return (
@@ -87,7 +91,7 @@ export function MatchStats({ participants }) {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="value" fill="#8884d8" />
+                    <Bar dataKey="value" fill="#fill" />
                 </BarChart>
             </ResponsiveContainer>
         </>
