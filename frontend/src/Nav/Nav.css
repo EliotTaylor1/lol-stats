@@ -2,13 +2,13 @@ nav {
     display: flex;
 }
 
-nav .navElement {
+nav .nav-element {
     padding: 10px;
     margin: 10px;
     border: 1px solid grey;
     border-radius: 5px;
 }
 
-nav .navElement.last {
+nav .nav-element.last {
     margin-left: auto;
 }

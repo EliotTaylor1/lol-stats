@@ -18,7 +18,7 @@ export default function MatchSummaryCard({matchData}) {
 
 
     return (
-        <div className="MatchSummaryCard">
+        <div className="match-summary-card">
             <MatchSummaryOverview matchData={matchData} />
             <Participants participants={participants} matchId={matchData.match_id} />
         </div>

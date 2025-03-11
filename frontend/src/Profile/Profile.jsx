@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import ProfileHeader from './ProfileHeader';
 import ProfileRank from './ProfileRank'
 import ProfileMastery from './ProfileMastery'
+import MatchSummaryCard from "../Match/MatchSummary/MatchSummaryCard.jsx";
+import './Profile.css'
 
 export default function Profile() {
     const {platform, nameTag} = useParams();
@@ -118,7 +120,7 @@ export default function Profile() {
                 />
             )}
 
-            <div className="tabs">
+            <div className="tabs-container">
                 <button
                     className={activeTab === 'rank' ? 'active' : ''}
                     onClick={() => setActiveTab('rank')}
@@ -139,17 +141,15 @@ export default function Profile() {
                 </button>
             </div>
 
-            <div className="tab-content">
+            <div>
                 {activeTab === 'rank' && summonerData?.ranks && <ProfileRank data={summonerData.ranks} />}
                 {activeTab === 'mastery' && summonerMasteryData && <ProfileMastery data={summonerMasteryData} />}
                 {activeTab === 'matches' && summonerMatchData && (
-                    <ol>
+                    <div className="matches-container">
                         {summonerMatchData.map((match) => (
-                            <li key={match}>
-                                <Link to={`/match/${match}/details`}>{match}</Link>
-                            </li>
+                            <MatchSummaryCard key={match.match_id} matchData={match}/>
                         ))}
-                    </ol>
+                    </div>
                 )}
             </div>
         </div>

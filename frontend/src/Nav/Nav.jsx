@@ -5,10 +5,10 @@ import './Nav.css'
 export default function Nav() {
     return (
         <nav>
-            <Link className='navElement' to="/">Summoner Search</Link>
-            <Link className='navElement' to="/match">Match Details</Link>
-            <Link className='navElement' to="/">About</Link>
-            <Link className='navElement last' to="/">Contact</Link>
+            <Link className='nav-element' to="/">Summoner Search</Link>
+            <Link className='nav-element' to="/match">Match Details</Link>
+            <Link className='nav-element' to="/">About</Link>
+            <Link className='nav-element last' to="/">Contact</Link>
         </nav>
     )
 }
