@@ -385,8 +385,8 @@ export const getMatches = async (platform, summonerName, tag, numOfMatches) => {
     const puuid = await getSummonerPuuidFromPlatformNameTag(platform, summonerName, tag);
     const participants = await prisma.participant.findMany({
         where: { puuid: puuid },
-        select: {
-            match_id: true,
+        include: {
+            match: true
         },
         orderBy: {
             match: {
@@ -399,9 +399,9 @@ export const getMatches = async (platform, summonerName, tag, numOfMatches) => {
     if (participants.length === 0) {
         throw new Error(`No matches found in Participant table for ${puuid}`)
     }
-    const matchIds = participants.map(p => p.match_id);
+    const matches = participants.map(p => p.match);
 
-    return matchIds;
+    return matches;
 }
 
 export const createMasteries = async (platform, summonerName, tag) => {
