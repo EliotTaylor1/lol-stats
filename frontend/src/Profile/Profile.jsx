@@ -1,4 +1,4 @@
-import {useParams, Link} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useEffect, useState} from "react";
 import ProfileHeader from './ProfileHeader';
 import ProfileRank from './ProfileRank'
@@ -40,7 +40,7 @@ export default function Profile() {
             const response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}`);
             const data = await response.json();
             setSummonerData(data.summoner);
-        } catch (err) {
+        } catch {
             setError('Failed to fetch summoner data.');
         } finally {
             setLoading(false);
@@ -57,7 +57,7 @@ export default function Profile() {
             const response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/matches?numOfMatches=10`);
             const data = await response.json();
             setSummonerMatchData(data);
-        } catch (err) {
+        } catch {
             setError('Failed to fetch matches.');
         } finally {
             setLoading(false);
@@ -80,9 +80,11 @@ export default function Profile() {
             let response, data;
 
             if (tab === 'mastery') {
+                // refresh mastery data or create mastery records if none currently exist
                 await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/mastery`,{
                     method: 'POST',
                 });
+                // fetch the refreshed data
                 response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/mastery`);
                 data = await response.json();
                 setSummonerMasteryData(data.mastery);
@@ -90,7 +92,7 @@ export default function Profile() {
                 await fetchMatches();
             }
             setActiveTab(tab);
-        } catch (err) {
+        } catch {
             setError(`Failed to fetch ${tab} data.`);
         } finally {
             setLoading(false);
