@@ -104,7 +104,7 @@ export default function Profile() {
         setSummonerData(null);
         setSummonerMasteryData(null);
         setSummonerMatchData(null);
-        setActiveTab(null);
+        setActiveTab('rank');
         await fetchProfileHeader();
         await fetchMatches();
     };
