@@ -109,7 +109,7 @@ export default function Profile() {
 
 
     return (
-        <div>
+        <div className="profile-container">
             {summonerData && (
                 <ProfileHeader
                     name={name}
@@ -141,7 +141,7 @@ export default function Profile() {
                 </button>
             </div>
 
-            <div>
+            <div className="tab-content-container">
                 {activeTab === 'rank' && summonerData?.ranks && <ProfileRank data={summonerData.ranks} />}
                 {activeTab === 'mastery' && summonerMasteryData && <ProfileMastery data={summonerMasteryData} />}
                 {activeTab === 'matches' && summonerMatchData && (

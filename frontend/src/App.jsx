@@ -5,16 +5,17 @@ import Profile from "./Profile/Profile.jsx"
 import ProfileSearchForm from "./Search/ProfileSearchForm.jsx"
 import MatchDetails from "./Match/MatchDetails/MatchDetails.jsx"
 import MatchSearch from "./Match/MatchSearch.jsx"
+import './App.css'
 
 function Layout() {
     return (
-        <>
+        <div className="main-container">
             <Nav/>
             <main>
                 <Outlet/>
             </main>
             <Footer/>
-        </>
+        </div>
     )
 }
 

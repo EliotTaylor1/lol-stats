@@ -1,3 +1,9 @@
+.profile-container {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .tabs-container {
     display: flex;
     align-items: center;
@@ -22,6 +28,10 @@
 
 .tabs-container button:hover {
     background: #2a5290;
+}
+
+.tab-content-container {
+    width: 100%;
 }
 
 .matches-container {

@@ -2,6 +2,13 @@
     display: flex;
     gap: 1rem;
     margin: 1rem;
+    background: #333;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.summoner-details div{
+    margin: 0.3rem;
 }
 
 .profile-icon {
@@ -11,27 +18,7 @@
     border: 3px solid #3265b1;
 }
 
-.summonerInfo {
-    flex: 1;
-}
-
-.summonerName {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.summonerTag {
-    color: #666;
-    font-weight: normal;
-}
-
-.level {
-    color: #888;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-}
-
-.refreshButton {
+.refresh {
     background: #3265b1;
     color: white;
     border: none;
@@ -41,6 +28,6 @@
     transition: background 0.2s;
 }
 
-.refreshButton:hover {
+.refresh:hover {
     background: #2a5290;
 }
