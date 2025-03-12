@@ -80,6 +80,9 @@ export default function Profile() {
             let response, data;
 
             if (tab === 'mastery') {
+                await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/mastery`,{
+                    method: 'POST',
+                });
                 response = await fetch(`http://localhost:3000/api/profile/${platform}/${name}-${tag}/mastery`);
                 data = await response.json();
                 setSummonerMasteryData(data.mastery);
