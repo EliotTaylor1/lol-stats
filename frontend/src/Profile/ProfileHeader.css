@@ -1,0 +1,33 @@
+.header-container {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem;
+    background: #333;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.summoner-details div{
+    margin: 0.3rem;
+}
+
+.profile-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #3265b1;
+}
+
+.refresh {
+    background: #3265b1;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.refresh:hover {
+    background: #2a5290;
+}

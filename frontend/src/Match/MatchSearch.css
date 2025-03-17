@@ -1,0 +1,17 @@
+.match-search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.recent-matches {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.match-card-container {
+    width: 50%;
+}

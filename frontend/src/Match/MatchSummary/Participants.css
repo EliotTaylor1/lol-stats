@@ -1,0 +1,15 @@
+.participants-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-column-start: 2;
+}
+
+.participants-container .red{
+    grid-column-start: 1;
+}
+
+.participants-container .blue{
+    grid-column-start: 2;
+}
+

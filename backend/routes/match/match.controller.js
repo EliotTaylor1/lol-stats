@@ -1,7 +1,21 @@
 import express from 'express'
-import { getMatchSummary, getMatchDetails } from './matches.service.js'
+import {getMatchSummary, getMatchDetails, getMatches} from './matches.service.js'
 
 const router = express.Router();
+
+router.get('/matches', async (req, res) => {
+    try {
+        const matches = await getMatches()
+        res.status(200);
+        res.json(matches);
+    } catch (e) {
+        console.log(e);
+        res.status(404);
+        res.json({
+            error: 'No matches stored'
+        });
+    }
+});
 
 router.get('/match/:match_id/summary', async (req, res) => {
     try {

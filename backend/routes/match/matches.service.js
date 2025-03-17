@@ -1,6 +1,19 @@
+import {assignPositionId, setWinningTeam} from "./match.utils.js";
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
+
+export const getMatches = async () => {
+    const matches = await prisma.match.findMany({
+        orderBy: {
+            start: 'desc'
+        }
+    })
+    if (!matches) {
+        throw new Error('No matches found')
+    }
+    return matches
+}
 
 export const getMatchSummary = async (match_id) => {
     const match = await prisma.match.findUnique({
@@ -9,12 +22,15 @@ export const getMatchSummary = async (match_id) => {
             start: true,
             duration: true,
             gamemode: true,
+            queue_id: true,
             participants: {
                 select: {
                     team_id: true,
                     win: true,
                     champion_id: true,
-                    individual_position: true,
+                    champion_name: true,
+                    team_position: true,
+                    puuid: true,
                     summoner: {
                         select: {
                             summoner_name: true,
@@ -54,7 +70,15 @@ export const getMatchSummary = async (match_id) => {
     });
     if (!match) {
         throw new Error(`${match_id} does not exist in Match table`)
-    };
+    }
+    // assigns an ID based on the position the pariticpant played so we can order them in front end
+    for (const participant of match.participants) {
+        if (participant.team_position === "") { //some modes have no positions and therefore set pos to: ""
+            continue;
+        }
+        const positionId = assignPositionId(participant.team_position)
+        participant.position_id = positionId
+    }
     return match;
 };
 
@@ -110,6 +134,17 @@ export const getMatchDetails = async (match_id) => {
     });
     if (!match) {
         throw new Error(`${match_id} does not exist in Match table`)
-    };
+    }
+    if (match.queue_id !== 1700) { //1700 is arena with no team colours
+        match.winning_team = setWinningTeam(match)
+    }
+    // assigns an ID based on the position the pariticpant played so we can order them in front end
+    for (const participant of match.participants) {
+        if (participant.team_position === "") { //some modes have no positions and therefore set pos to: ""
+            continue;
+        }
+        const positionId = assignPositionId(participant.team_position)
+        participant.position_id = positionId
+    }
     return match;
 };

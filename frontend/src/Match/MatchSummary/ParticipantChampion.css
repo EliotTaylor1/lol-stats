@@ -1,0 +1,14 @@
+.participant-champion {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.participant-champion img {
+    width: 24px;
+    height: auto;
+}
+
+.participant-champion .participant-name:hover {
+    color: #3265b1;
+}

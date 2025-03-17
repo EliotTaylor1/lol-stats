@@ -1,0 +1,8 @@
+.match-summary-overview {
+    grid-column-start: 1;
+    align-self: center;
+}
+
+.match-summary-overview .match-id:hover {
+    color: #3265b1;
+}

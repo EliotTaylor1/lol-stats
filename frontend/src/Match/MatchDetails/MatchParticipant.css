@@ -1,0 +1,48 @@
+.participant-card {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    width: 150px;
+}
+
+.champion {
+  height: 64px;
+  width: auto;
+}
+
+.build-icons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.build-icons-container img {
+  height: 32px;
+  width: auto;
+}
+
+.summoner-spell-trinket-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.summoner-spell-trinket-container img {
+  height: 32px;
+  width: auto;
+}
+
+.summoner-spell-trinket-container .trinket {
+  gap: 50px;
+  order: 1;
+}
+
+.summoner-spell-trinket-container .summoner-spell {
+  order: 2;
+}

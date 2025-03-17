@@ -13,31 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SummonerId {
-  puuid         String            @id @unique
-  summoner_id   String            @unique
-  account_id    String            @unique
-  summoner_name String
-  summoner_tag  String
-  created_at    DateTime          @default(now())
-  updated_at    DateTime          @updatedAt
-  details       SummonerDetails?
-  masteries     SummonerMastery[]
-  participants  Participant[]
-  ranks         SummonerRank[]
-
-  @@unique([summoner_name, summoner_tag])
-}
-
-model SummonerDetails {
-  puuid                 String     @id @unique
+model Summoner {
+  puuid                 String            @id @unique
+  summoner_id           String            @unique
+  account_id            String            @unique
+  summoner_name         String
+  summoner_tag          String
   summoner_level        Int
   summoner_profile_icon Int
   region                String
   platform              String
-  created_at            DateTime   @default(now())
-  updated_at            DateTime   @updatedAt
-  summonerId            SummonerId @relation(fields: [puuid], references: [puuid])
+  created_at            DateTime          @default(now())
+  updated_at            DateTime          @updatedAt
+  masteries             SummonerMastery[]
+  participants          Participant[]
+  ranks                 SummonerRank[]
+
+  @@unique([summoner_name, summoner_tag, platform])
 }
 
 model SummonerMastery {
@@ -46,9 +38,9 @@ model SummonerMastery {
   champion_level  Int
   champion_points Int
   last_play_time  DateTime
-  created_at      DateTime   @default(now())
-  updated_at      DateTime   @updatedAt
-  summoner        SummonerId @relation(fields: [puuid], references: [puuid])
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  summoner        Summoner @relation(fields: [puuid], references: [puuid])
 
   @@id([puuid, champion_id])
   @@unique([puuid, champion_id])
@@ -62,9 +54,9 @@ model SummonerRank {
   points      Int
   wins        Int
   losses      Int
-  created_at  DateTime   @default(now())
-  updated_at  DateTime   @updatedAt
-  summoner    SummonerId @relation(fields: [summoner_id], references: [summoner_id])
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  summoner    Summoner @relation(fields: [summoner_id], references: [summoner_id])
 
   @@id([summoner_id, queue_type])
   @@unique([summoner_id, queue_type])
@@ -77,28 +69,30 @@ model Match {
   duration     Int
   gamemode     String
   game_type    String
+  queue_id     Int
   game_version String
   created_at   DateTime      @default(now())
   participants Participant[]
 }
 
 model Participant {
-  match_id            String
-  puuid               String
-  team_id             Int
-  win                 Boolean
-  champion_id         Int
-  time_played         Int
-  lane                String
-  role                String
-  individual_position String
-  performance         ParticipantPerformance?
-  build               ParticipantBuild?
-  pings               ParticipantPings?
-  casts               ParticipantCasts?
-  challenges          ParticipantChallenges?
-  match               Match                   @relation(fields: [match_id], references: [match_id])
-  summoner            SummonerId              @relation(fields: [puuid], references: [puuid])
+  match_id      String
+  puuid         String
+  team_id       Int
+  win           Boolean
+  champion_id   Int
+  champion_name String
+  time_played   Int
+  lane          String
+  role          String
+  team_position String
+  performance   ParticipantPerformance?
+  build         ParticipantBuild?
+  pings         ParticipantPings?
+  casts         ParticipantCasts?
+  challenges    ParticipantChallenges?
+  match         Match                   @relation(fields: [match_id], references: [match_id])
+  summoner      Summoner                @relation(fields: [puuid], references: [puuid])
 
   @@id([match_id, puuid])
 }
@@ -311,4 +305,12 @@ model ParticipantChallenges {
   wards_guarded                                    Int?
 
   @@id([match_id, puuid])
+}
+
+model Champions {
+  champion_id  String
+  champion_key Int
+
+  @@id([champion_id, champion_key])
+  @@unique([champion_id, champion_key])
 }

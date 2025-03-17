@@ -1,11 +1,20 @@
 # LoL Stats
-LoL Stats is a dockerised backend app which uses the Riot Games API to serve and store stats for a League of Legends player.  
-Stack: Node.js, Express, Morgan, Prisma, PostgreSQL  
+LoL Stats is a fullstack app which uses the Riot Games API to serve and store stats for a League of Legends player.  
+Stack: 
+- Node.js, 
+- Express, 
+- Morgan, 
+- Prisma, 
+- PostgreSQL
+- Nginx
+- React
 
 ---
 
-### ENV
-You should create a `.env` file in the root directory of this project with the following variables:
+### ENVs
+You should create a `.env` file in the root of the backend and frontend directories of this project with the following variables:
+
+#### backend:
 ```
 RG_API_KEY=//Your Riot Games API key (https://developer.riotgames.com/)
 PORT=//Port to run the express app on (3000)
@@ -15,7 +24,11 @@ POSTGRES_USER=//PostgreSQL username (user)
 POSTGRES_PASSWORD=//PostgreSQL password (password)
 POSTGRES_DB=//PostgreSQL database name (mydb)
 ```
-
+#### frontend
+```
+VITE_API=//URL to your APIs (/api)
+VITE_PATCH=//League of Legends patch for assets (15.4.1)
+```
 ---
 
 ### Running the app
@@ -26,3 +39,4 @@ POSTGRES_DB=//PostgreSQL database name (mydb)
 > `http://localhost:3000/`  
 > and you should get a response:  
 > `Success: API is working`  
+4. Go to https://localhost:8080 to reach the landing page
