@@ -1,21 +1,26 @@
+.details-container {
+    width: 90%;
+}
+
 .teams-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
+    margin-top: 20px;
 }
   
-.team-row-blue {
+.team-row {
     display: flex;
     justify-content: space-evenly;
-    border: blue 2px solid;
     padding: 5px;
-    margin-bottom: 5px
+    margin-bottom: 5px;
+    gap: 3px;
 }
 
-.team-row-red {
-    display: flex;
-    justify-content: space-evenly;
-    border: red 2px solid;
-    padding: 5px;
-    margin-top: 5px;
+.red {
+    border: 1px solid red;
+}
+
+.blue {
+    border: 1px solid blue;
 }

@@ -38,13 +38,13 @@ export default function MatchDetails() {
   redTeam.sort((a, b) => a.position_id - b.position_id)
 
   return (
-    <div>
+    <div className="details-container">
       <MatchOverview matchData={matchData} />
-      <div className="teamsContainer">
-        <div className="team-row-blue">
+      <div className="teams-container">
+        <div className="team-row blue">
           {blueTeam.map(participant => <MatchParticipant key={participant.puuid} participant={participant} />)}
         </div>
-        <div className="team-row-red">
+        <div className="team-row red">
           {redTeam.map(participant => <MatchParticipant key={participant.puuid} participant={participant} />)}
         </div>
       </div>
